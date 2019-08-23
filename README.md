@@ -5,6 +5,16 @@ Please use the following reference when you use FaReT in your research:
 
 **Hays, J., Wong, C., & Soto, F. A. (2019). FaReT: A free and open-source toolkit of three-dimensional models and software to study face perception.**
 
+## Table of contents
+[Installation](#installation)
+["Morphing" in 3d shape space](#morphing-in-3d-shape-space)
+   [Interpolation (i.e., morphing)](#interpolation-ie-morphing)
+   [Extrapolation (i.e., caricaturing)](#extrapolation-ie-caricaturing)
+[Creating average models](#creating-average-models)
+[Standardizing models](#standardizing-models)
+[Creating dynamic animations from render sequences](#creating-dynamic-animations-from-render-sequences)
+[Communicating with Psychopy to render faces online](#communicating-with-psychopy-to-render-faces-online)
+
 # Installation
 ## Instal pre-requisites
 * You can download and install MakeHuman (stable version) from the following website: <http://www.makehumancommunity.org/content/downloads.html>. This is all you need to use FaReT and generate single face images.
