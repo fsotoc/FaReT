@@ -1,4 +1,6 @@
 import socket
+import json
+
 class Communicator(object):
     def __init__(self, server = True, host='localhost', port=55250, amount=1024, sep="|"):
         self.server = server
@@ -33,21 +35,22 @@ class Communicator(object):
     def send(self,  *messages):
         message = ""
         for m in messages:
-            message += str(m)+self.sep
-        print("Sending Message", message)
-        self.conn.sendall(message)
+            # convert data to string with serialization (json format)
+            # MakeHuman has different strings sometimes, so convert to py str()
+            message += str(json.dumps(m))+self.sep
+        #print("Sending Message", message)
+        # Python 3 only permits byte messages, so encode them as bytes
+        self.conn.sendall(message.encode('utf8'))
 
     def receive(self):
         buffer = ""
-        #try:
-        r = self.conn.recv(self.amount)
-        buffer += r
         while self.sep not in buffer:
             r = self.conn.recv(self.amount)
+            #change bytes to str
+            if 'byte' in str(type(r)):
+                r = r.decode('utf8')
             buffer += r
         return buffer
-        #except:
-        #    return buffer
 
     def get_message(self, n=1):
         count = 0
@@ -59,8 +62,12 @@ class Communicator(object):
             while not self.sep in self.receive_buffer:
                 self.receive_buffer += self.receive()
             i = self.receive_buffer.index(self.sep)
-            message = self.receive_buffer[:i]
-            self.receive_buffer = self.receive_buffer[i+1:]
+            
+            #print(self.receive_buffer[:i])
+            # change json str to original type
+            message = json.loads(self.receive_buffer[:i])
+            # keep incomplete messages in the buffer
+            self.receive_buffer = self.receive_buffer[i+len(self.sep):]
             if n == 1:
                 return message
             messages += (message,)

@@ -42,7 +42,7 @@ TODO
 """
 
 from . import commons
-from . import mh_client
+from . import mh_server
 
 from core import G
 import gui
@@ -63,82 +63,18 @@ class SocketRenderTaskView(RenderTaskView):
         self.taskViewShader = G.app.selectedHuman.material.shader
 
         settingsBox = self.addLeftWidget(gui.GroupBox('Settings'))
-        settingsBox.addWidget(gui.TextView("Resolution"))
-        self.resBox = settingsBox.addWidget(gui.TextEdit(
-            "x".join([str(self.renderingWidth), str(self.renderingHeight)])))
-        self.AAbox = settingsBox.addWidget(gui.CheckBox("Anti-aliasing"))
-        self.AAbox.setSelected(G.app.getSetting('GL_RENDERER_AA'))
-        
 
-        self.lightmapSSS = gui.CheckBox("Lightmap SSS")
-        self.lightmapSSS.setSelected(G.app.getSetting('GL_RENDERER_SSS'))
-
-        self.optionsBox = self.addLeftWidget(gui.GroupBox('Options'))
-        self.optionsWidgets = []
-
-        
-        self.path = ""
-        self.path_button = settingsBox.addWidget(gui.BrowseButton('dir', "Select an output directory"))
-        self.pathBox = settingsBox.addWidget(gui.TextEdit(self.path))
-        self.nameBox = settingsBox.addWidget(gui.TextEdit("John_Doe"))
-        @self.path_button.mhEvent
-        def onClicked(path):
-            self.path = path
-            self.pathBox.setText(self.path)
-        
         self.renderButton = settingsBox.addWidget(gui.Button('Socket Render'))
-        renderMethodBox = self.addRightWidget(gui.GroupBox('Rendering methods'))
-        self.renderMethodList = renderMethodBox.addWidget(gui.ListView())
-        self.renderMethodList.setSizePolicy(
-            gui.SizePolicy.Ignored, gui.SizePolicy.Preferred)
-
-        # Rendering methods
-        self.renderMethodList.addItem('Quick Render')
-        self.renderMethodList.addItem('Advanced Render',
-            data=[self.lightmapSSS])
+        
 
         if not mh.hasRenderToRenderbuffer():
             self.firstTimeWarn = True
-            # Can only use screen grabbing as fallback,
-            # resolution option disabled
-            self.resBox.setEnabled(False)
-            self.AAbox.setEnabled(False)
 
-        self.listOptions(None)
-
-        @self.resBox.mhEvent
-        def onChange(value):
-            try:
-                value = value.replace(" ", "")
-                res = [int(x) for x in value.split("x")]
-                self.renderingWidth = res[0]
-                self.renderingHeight = res[1]
-            except:  # The user hasn't typed the value correctly yet.
-                pass
-
-        @self.AAbox.mhEvent
-        def onClicked(value):
-            G.app.setSetting('GL_RENDERER_AA', self.AAbox.selected)
-
-        @self.lightmapSSS.mhEvent
-        def onClicked(value):
-            G.app.setSetting('GL_RENDERER_SSS', self.lightmapSSS.selected)
-
-        @self.renderMethodList.mhEvent
-        def onClicked(item):
-            self.listOptions(item.getUserData())
 
         @self.renderButton.mhEvent
         def onClicked(event):
-            settings = dict()
-            settings['scene'] = G.app.scene
-            settings['AA'] = self.AAbox.selected
-            settings['dimensions'] = (self.renderingWidth, self.renderingHeight)
-            settings['lightmapSSS'] = self.lightmapSSS.selected and self.lightmapSSS in self.optionsWidgets
-
-            #mh2opengl.Render(settings)
-            # do socket op here
-            mh_client.do_op(self.pathBox.getText(), self.nameBox.getText(), settings)
+            # do socket ops here
+            mh_server.do_op()
             
 
     def onShow(self, event):
@@ -153,18 +89,6 @@ class SocketRenderTaskView(RenderTaskView):
     def onHide(self, event):
         RenderTaskView.onHide(self, event)
 
-    def listOptions(self, widgets):
-        for child in self.optionsBox.children[:]:
-            self.optionsBox.removeWidget(child)
-
-        if widgets:
-            self.optionsWidgets = widgets
-            self.optionsBox.show()
-            for widget in widgets:
-                self.optionsBox.addWidget(widget)
-        else:
-            self.optionsWidgets = []
-            self.optionsBox.hide()
 
 
 def load(app):
