@@ -149,8 +149,7 @@ Copy these files next to your PsychoPy experiment file (or into the site-package
 Within PsychoPy, you need to import the PythonMHC communication class.
 ```python
 from py_client import PythonMHC
-# the sep value indicates what separates messages: the default from my communicator class is a single "|" but MakeHuman uses that in its shape names, so use 3 |||'s instead.
-makehuman = PythonMHC(False, sep="|||")
+makehuman = PythonMHC()
 ```
 If you want to avoid having to restart MakeHuman every time you exit a PsychoPy run, add this to the beginning of the experiment script as well:
 ```python
