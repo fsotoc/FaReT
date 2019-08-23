@@ -29,6 +29,9 @@ def difference(b, a, bPercent):
     return diff
 # opens a connection to MH
 class PythonMHC(communicator.Communicator):
+    def __init__(self, server = False, host='localhost', port=55250, amount=1024, sep="|||"):
+        super(PythonMHC, self).__init__(server, host, port, amount, sep)
+
     # make MakeHuman do arbitrary things with the execute message:
     # funcName -- the string name of the function.
     # feedback (True/False) -- do you expect returned output data?
