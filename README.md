@@ -130,3 +130,95 @@ mass_make_gifs("C:/path-to-png-folders/", "C:/path-to-png-folders/MH_{0:04d}.gif
 ```
 
 # Communicating with Psychopy to render faces online
+The Socket Render plugin is made for telling MakeHuman what to do from PsychoPy or any Python project.
+
+## PsychoPy Installation
+Copy these files next to your PsychoPy experiment file (or into the site-packages library that PsychoPy uses):
+* communicator.py
+  * MakeHuman also needs communicator.py, so do not use Cut to move it out of 4_socket_render: Copy it.
+* py_client.py
+
+## Setting up MakeHuman
+* In MakeHuman, navigate to the Rendering tab at the top of the window.
+* Select the "Socket Render" subtab.
+* When you are ready to open a connection to PsychoPy, push the button labeled "Socket Render", which starts a local server that is waiting for the py_client to connect.  
+  * MakeHuman will appear to "stall" while it is waiting for input from the Python client: you cannot interact directly with MakeHuman's GUI while it is taking instructions from the Python client.
+* Make sure that you start the server before running the PsychoPy experiment.
+
+## Setting up PsychoPy
+Within PsychoPy, you need to import the PythonMHC communication class.
+```python
+from py_client import PythonMHC
+# the sep value indicates what separates messages: the default from my communicator class is a single "|" but MakeHuman uses that in its shape names, so use 3 |||'s instead.
+makehuman = PythonMHC(False, sep="|||")
+```
+If you want to avoid having to restart MakeHuman every time you exit a PsychoPy run, add this to the beginning of the experiment script as well:
+```python
+import atexit
+# when the session ends, close the link, but keep the server alive, waiting for the next PsychoPy run.
+# at the end of a run, makehuman.close() will send the string, 'exit', 
+#  to tell MakeHuman's server to wait for another connection from PsychoPy.
+atexit.register(makehuman.close)
+```
+
+Now you have a connection with MakeHuman from PsychoPy!
+The most important function in py_client.py is execute_MH():
+* It takes the name of a function as a string,
+* Whether you want MakeHuman to return the output of the function,
+* Whether you want PsychoPy to wait for that return message to come back before moving on,
+* And, the arguments you want to pass to MakeHuman.
+
+This is an example of how you could load a model.
+```python
+filename = "C:/Example/Model.mhm" # the absolute path
+makehuman.execute_MH("gui3d.app.loadHumanMHM", False, False, filename)
+```
+However, for your convenience, some functions -- like load_model() -- are set up ahead of time:
+```python
+# makehuman.*function* functions almost all wrap around execute_MH()
+makehuman.load_model(filename)
+# make the camera look at the face
+makehuman.setFaceCamera()
+# retrieve the shape parameter dictionary
+params = makehuman.get_model_params()
+# set and update the model's shape parameters
+makehuman.set_model_params(params)
+
+emotion_file = "C:/Example/Emotion.mhpose"
+# load the expression parameters for neutral and some emotion (as specified by an mhpose file).
+neutral, emotion = makehuman.load_expression(emotion_file)
+# set an emotional expression at a specific percentage
+makehuman.set_expression(neutral, emotion, 50.0) # 0.0 would be purely neutral, 100 would be "fully" expressing the emotion.
+
+# you can specify how you want MakeHuman to render each stimulus.
+render_settings = dict()
+render_settings['AA'] = True#/False #anti-aliasing -- smoothing by rendering at a larger scale and then downscaling
+render_settings['dimensions'] = (256, 256) # how big is the image
+render_settings['lightmapSSS'] = False # do you want cool, slow to render lighting effects?
+
+save_location = "C:/Example/Image_Folder/"
+image_number = 0
+# Ask MakeHuman to render and save whatever to the save location, 
+#  and wait until MakeHuman finishes before moving on.
+image_path = makehuman.get_render(save_location, render_settings, image_number)
+# you only need to increment the image number want to reserve
+# the previously rendered image for the next time
+# (or if you are going to render multiple images in one trial).
+#image_number+=1
+
+# $image_path can be given to ImageStim components as long as the Image is set every repeat.
+```
+
+If you want to kill the server without terminating MakeHuman's process, you can send the string 'shutdown' to resume MakeHuman's normal processing.  
+```python
+# unlike when MakeHuman receives the 'exit' string (which only indicates that 
+#  the PsychoPy/Python client has left),
+# shutting down the MakeHuman server means you will have to click the "Socket Render"
+# button again before you want to start the next PsychoPy Run.
+makehuman.send('shutdown')
+```
+
+
+
+
+
