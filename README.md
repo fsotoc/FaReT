@@ -1,6 +1,8 @@
 # FaReT
 **Fa**ce **Re**search **T**oolkit: A free and open-source toolkit of three-dimensional models and software to study face perception.
 
+![](example.gif)
+
 Please use the following reference when you use FaReT in your research:
 
 **Hays, J., Wong, C., & Soto, F. A. (2019). FaReT: A free and open-source toolkit of three-dimensional models and software to study face perception.**
