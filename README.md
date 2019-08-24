@@ -180,6 +180,9 @@ makehuman.load_model(filename)
 makehuman.setFaceCamera()
 # retrieve the shape parameter dictionary
 params = makehuman.get_model_params()
+
+# alter the params so that they have a large forehead
+params['forehead/forehead-scale-vert-decr|incr'] = 1
 # set and update the model's shape parameters
 makehuman.set_model_params(params)
 
