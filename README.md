@@ -211,7 +211,7 @@ image_path = makehuman.get_render(save_location, render_settings, image_number)
 # $image_path can be given to ImageStim components as long as the Image is set every repeat.
 ```
 
-If you want to kill the server without terminating MakeHuman's process, you can send the string 'shutdown' to resume MakeHuman's normal processing.  
+If you want to kill the server without terminating MakeHuman's process, you can send the string 'shutdown' to resume MakeHuman's normal GUI-based operations.
 ```python
 # unlike when MakeHuman receives the 'exit' string (which only indicates that 
 #  the PsychoPy/Python client has left),
