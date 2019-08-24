@@ -129,7 +129,7 @@ def mass_make_gifs(super_path, out_file_path_format, fps=33.33333):
 mass_make_gifs("C:/path-to-png-folders/", "C:/path-to-png-folders/MH_{0:04d}.gif", 33.33333)
 ```
 
-# Communicating with Psychopy to render faces online
+# Communicating with PsychoPy to render faces online
 The Socket Render plugin is made for telling MakeHuman what to do from PsychoPy or any Python project.
 
 ## PsychoPy Installation
