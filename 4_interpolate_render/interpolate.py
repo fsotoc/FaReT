@@ -77,16 +77,14 @@ def set_pose(pose_modifiers):
     human = gui3d.app.selectedHuman
     modifiers, base_poseunit = get_blank_pose()
 
-    for key in modifiers:
-        if key in pose_modifiers:
-            modifiers[key] = pose_modifiers[key]
+    for key in pose_modifiers:
+        modifiers[key] = pose_modifiers[key]
     # see which values are different so only those are updated
     posenames = []
     posevalues = []
     for pname, pval in modifiers.items():
-        if pval != 0:
-            posenames.append(pname)
-            posevalues.append(pval)
+        posenames.append(pname)
+        posevalues.append(pval)
     if len(posenames) > 0:
         panim = base_poseunit.getBlendedPose(posenames, posevalues)
         panim.disableBaking = False
