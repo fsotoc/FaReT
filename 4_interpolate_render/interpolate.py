@@ -166,6 +166,7 @@ def difference(b, a, bPercent):
 
 
 isNumberType = None
+Number = None
 try:
     from numbers import Number
 except:

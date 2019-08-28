@@ -95,6 +95,7 @@ def render(out_path, settings, image_count=0):
     return img_path
 
 isNumberType = None
+Number = None
 try:
     from numbers import Number
 except:
