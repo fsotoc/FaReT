@@ -194,7 +194,7 @@ def divide(a, change):
     # dictionaries
     quo = {}
     for key in a:
-        if isinstance(change, Number):
+        if (isNumberType is not None and isNumberType(change)) or (Number is not None and isinstance(change, Number)):
             if change != 0:
                 quo[key] = a[key] / change
             else:
