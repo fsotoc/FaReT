@@ -31,7 +31,7 @@ Please use the following reference when you use FaReT in your research:
     * **On Windows**, find the MakeHuman shortcut located where you unzipped MakeHuman. Right-click on the shortcut and choose `Open File Location`. This will open the installation folder.
     * **On MacOS X**, open Finder and go to the folder where MakeHuman has been installed. This is usually the `Applications` folder. Right-click (or control+click) the MakeHuman shortcut and choose `Show Package Contents`.
     * **On Debian-like** systems, when using a package management, the folder is found at `/usr/share/makehuman`. 
-* Inside the MakeHuman directory, you will find a sub-folder called `PlugIns` or `plugins`.
+* Inside the MakeHuman directory, go to the sub-folder `Resources/plugins` or `plugins`.
 * From the downloaded FaReT folder, copy the entire sub-folders `4_average_model`, `4_interpolate_render`, `4_socket_psychopy`, and `4_standardizer`.
 * Paste the subfolders and their contents into MakeHuman's plugins folder.
 * If you already had MakeHuman open ***before*** you installed the plugin, close it and ***re-open*** it so that the plugin will load.
