@@ -150,7 +150,7 @@ def get_change(key_frames, change_key, current_index, frames):
 def difference(b, a, bPercent):
     # get the difference between the values
     # if the values are dictionaries, make sure to assign values of 0 when the keys do not exist
-    if isinstance(a, Number):
+    if (isNumberType is not None and isNumberType(a)) or isinstance(a, Number):
         return b-a
 
     diff = {}
@@ -164,11 +164,18 @@ def difference(b, a, bPercent):
         diff[key] = (b[key] - a[key])*(bPercent/100.)
     return diff
 
-from numbers import Number
+
+isNumberType = None
+try:
+    from numbers import Number
+except:
+    import operator
+    isNumberType = operator.isNumberType
+
 
 def add(a, change):
     # just numbers
-    if isinstance(a, Number):
+    if (isNumberType is not None and isNumberType(a)) or isinstance(a, Number):
         return a + change
     
     summed = {}
