@@ -94,12 +94,16 @@ def render(out_path, settings, image_count=0):
     img.save(img_path)
     return img_path
 
-
-from numbers import Number
+isNumberType = None
+try:
+    from numbers import Number
+except:
+    import operator
+    isNumberType = operator.isNumberType
 
 def add(a, change):
     # just numbers
-    if isinstance(a, Number):
+    if (isNumberType is not None and isNumberType(a)) or isinstance(a, Number):
         return a + change
     
     summed = {}
@@ -110,7 +114,7 @@ def add(a, change):
 def difference(b, a, bPercent):
     # get the difference between the values
     # if the values are dictionaries, make sure to assign values of 0 when the keys do not exist
-    if isinstance(a, Number):
+    if (isNumberType is not None and isNumberType(a)) or isinstance(a, Number):
         return b-a
 
     diff = {}
