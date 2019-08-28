@@ -186,7 +186,7 @@ def add(a, change):
 
 def divide(a, change):
     # just numbers
-    if isinstance(a, Number):
+    if (isNumberType is not None and isNumberType(a)) or (Number is not None and isinstance(a, Number)):
         if change != 0:
             return a / change
         else:
