@@ -7,6 +7,8 @@ Please use the following reference when you use FaReT in your research:
 
 **Hays, J., Wong, C., & Soto, F. A. (2019). FaReT: A free and open-source toolkit of three-dimensional models and software to study face perception.**
 
+If you find FaReT useful for your research, please consider supporting the developers who maintain and develop [MakeHuman](http://www.makehumancommunity.org), the free and open source 3D computer graphics software that FaReT uses to create face stimuli. You can do that in their [Patreon page](https://www.patreon.com/makehuman)
+
 ## Table of contents
 * [Installation](#installation)
 * ["Morphing" in 3d shape space](#morphing-in-3d-shape-space)
@@ -31,7 +33,7 @@ Please use the following reference when you use FaReT in your research:
     * **On Windows**, find the MakeHuman shortcut located where you unzipped MakeHuman. Right-click on the shortcut and choose `Open File Location`. This will open the installation folder.
     * **On MacOS X**, open Finder and go to the folder where MakeHuman has been installed. This is usually the `Applications` folder. Right-click (or control+click) the MakeHuman shortcut and choose `Show Package Contents`.
     * **On Debian-like** systems, when using a package management, the folder is found at `/usr/share/makehuman`. 
-* Inside the MakeHuman directory, go to the sub-folder `Resources/plugins` or `plugins`.
+* Inside the MakeHuman directory, go to the sub-folder `Resources/plugins` (MacOS X; **not** the `PlugIns` folder inside `Contents`, but a subfolder inside the `Resources` folder) or `plugins` (others).
 * From the downloaded FaReT folder, copy the entire sub-folders `4_average_model`, `4_interpolate_render`, `4_socket_psychopy`, and `4_standardizer`.
 * Paste the subfolders and their contents into MakeHuman's plugins folder.
 * If you already had MakeHuman open ***before*** you installed the plugin, close it and ***re-open*** it so that the plugin will load.
@@ -44,7 +46,8 @@ Please use the following reference when you use FaReT in your research:
 
 # "Morphing" in 3d shape space
 ## Interpolation (i.e., "morphing")
-* Because it is an altered version of the Render Task View, it has the same options and more (which were mostly added in the right pane).
+* Go to the `Rendering` tab and then to the `Interpolation Render` sub-tab.
+* Because it is an altered version of the Render Task View, it has the same options and more (which were mostly added in the right panel).
 * ![](https://mfr.osf.io/export?url=https://osf.io/3jav4/?action=download%26mode=render%26direct%26public_file=False&initialWidth=684&childId=mfrIframe&parentTitle=OSF+%7C+IRscreen.jpeg&parentUrl=https://osf.io/3jav4/&format=2400x2400.jpeg)
 
 * On the left, specify the folder in which you want the program to output the PNG files for each frame of the morph.
