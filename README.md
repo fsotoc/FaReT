@@ -132,6 +132,15 @@ def mass_make_gifs(super_path, out_file_path_format, fps=33.33333):
 mass_make_gifs("C:/path-to-png-folders/", "C:/path-to-png-folders/MH_{0:04d}.gif", 33.33333)
 ```
 
+## Using ImageJ to create AVI files
+* Sometimes you might want to create AVI files rather than GIFs, because it is easier to display AVIs in some experimental software (e.g., Psychopy) and/or because creating AVIs allows more control over the number of frames per second in the resulting animation.
+* Download ImageJ from [this website](https://imagej.net/Downloads) and run it.
+* Drag the folder containing the sequence of images previously created with FaReT and drop it on the ImageJ windows.
+* A prompt will appear asking if you want to open all the images in the folder as a stack. Click on "Yes".
+* Go to **File > Save as > AVI**
+* Choose your preferred compression and animation speed (frames per second) and proceed.
+* Name your file and save.
+
 # Communicating with PsychoPy to render faces online
 The Socket Render plugin is made for telling MakeHuman what to do from PsychoPy or any Python project.
 
