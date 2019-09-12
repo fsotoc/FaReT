@@ -1,0 +1,74 @@
+# Written by MakeHuman 1.1.0
+version v1.1.0
+tags CF03
+camera 0.0 0.0 -0.00976801788413 0.839224815951 0.0199519524326 7.6875
+modifier mouth/mouth-dimples-in|out 0.460000
+modifier cheek/r-cheek-volume-decr|incr 0.190000
+modifier nose/nose-volume-decr|incr 0.104000
+modifier macrodetails-universal/Muscle 0.552000
+modifier mouth/mouth-scale-horiz-decr|incr -0.166000
+modifier macrodetails/African 0.000000
+modifier cheek/r-cheek-trans-down|up 0.694000
+modifier macrodetails-proportions/BodyProportions 0.500000
+modifier chin/chin-width-decr|incr -0.226000
+modifier mouth/mouth-laugh-lines-in|out 0.116000
+modifier eyes/r-eye-trans-in|out -0.288000
+modifier macrodetails/Gender 0.000000
+modifier nose/nose-point-width-decr|incr 0.742000
+modifier macrodetails-height/Height 0.500000
+modifier breast/BreastSize 0.500000
+modifier cheek/r-cheek-inner-decr|incr 0.202000
+modifier eyes/l-eye-corner1-down|up -0.252000
+modifier mouth/mouth-scale-vert-decr|incr -0.030000
+modifier head/head-invertedtriangular 0.472000
+modifier cheek/l-cheek-inner-decr|incr 0.214000
+modifier nose/nose-septumangle-decr|incr -0.030000
+modifier cheek/r-cheek-bones-decr|incr -0.558000
+modifier forehead/forehead-scale-vert-decr|incr -0.264000
+modifier nose/nose-nostrils-width-decr|incr -0.522000
+modifier mouth/mouth-trans-down|up -0.142000
+modifier macrodetails/Age 0.571000
+modifier mouth/mouth-angles-down|up 0.128000
+modifier breast/BreastFirmness 0.500000
+modifier macrodetails/Asian 0.000000
+modifier chin/chin-height-decr|incr -0.030000
+modifier eyebrows/eyebrows-angle-down|up 0.042000
+modifier cheek/l-cheek-trans-down|up 0.694000
+modifier chin/chin-prominent-decr|incr 0.142000
+modifier eyes/l-eye-push1-in|out -0.582000
+modifier forehead/forehead-temple-decr|incr -0.362000
+modifier eyes/l-eye-trans-in|out -0.252000
+modifier head/head-fat-decr|incr -0.264000
+modifier cheek/l-cheek-bones-decr|incr -0.570000
+modifier head/head-age-decr|incr -0.080000
+modifier macrodetails/Caucasian 1.000000
+modifier head/head-square 0.074000
+modifier head/head-scale-horiz-decr|incr -0.116000
+modifier cheek/l-cheek-volume-decr|incr 0.166000
+modifier eyes/l-eye-scale-decr|incr -0.128000
+modifier chin/chin-prognathism-decr|incr 0.240000
+modifier nose/nose-scale-vert-decr|incr 0.142000
+modifier mouth/mouth-lowerlip-width-decr|incr 0.386000
+modifier nose/nose-nostrils-angle-down|up 0.104000
+modifier eyes/r-eye-push1-in|out -0.582000
+modifier mouth/mouth-upperlip-height-decr|incr -0.190000
+modifier eyebrows/eyebrows-trans-down|up 0.938000
+modifier nose/nose-scale-horiz-decr|incr -0.436000
+modifier mouth/mouth-upperlip-width-decr|incr -0.190000
+modifier head/head-scale-vert-decr|incr -0.068000
+modifier chin/chin-bones-decr|incr -0.068000
+modifier macrodetails-universal/Weight 0.552000
+modifier mouth/mouth-trans-backward|forward 0.190000
+modifier mouth/mouth-scale-depth-decr|incr -0.362000
+modifier mouth/mouth-lowerlip-height-decr|incr 0.006000
+modifier head/head-trans-down|up -0.448000
+modifier mouth/mouth-cupidsbow-width-decr|incr 0.582000
+modifier nose/nose-width3-decr|incr 0.226000
+tongue tongue01 52ad91a3-caad-4e50-8c38-67634e5e789c
+teeth Teeth_Base 0a5ec82a-0d5f-43ce-a765-8f076f95692d
+eyebrows eyebrow012 1c16325c-7831-4166-831a-05c5b609c219
+eyes HighPolyEyes 2c12f43b-1303-432c-b7ce-d78346baf2e6
+clothesHideFaces True
+skinMaterial skins/young_caucasian_female/young_caucasian_female2.mhmat
+material HighPolyEyes 2c12f43b-1303-432c-b7ce-d78346baf2e6 eyes/materials/brown.mhmat
+subdivide True

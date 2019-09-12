@@ -1,0 +1,32 @@
+{
+    "license": "AGPL3", 
+    "name": "angry", 
+    "copyright": "(c) MakeHuman.org 2001-2016", 
+    "tags": [
+        "no tag", 
+        "expression"
+    ], 
+    "author": "MakeHuman Team", 
+    "unit_poses": {
+        "NoseWrinkler": 0.613, 
+        "LeftLowerLidUp": 0.11, 
+        "UpperLipUp": 0.485, 
+        "RightLowerLidUp": 0.092, 
+        "LeftUpperLidOpen": 0.098, 
+        "NasolabialDeepener": 0.239, 
+        "RightBrowDown": 0.601, 
+        "MouthRightPlatysma": 0.196, 
+        "MouthLeftPlatysma": 0.196, 
+        "LipsKiss": 0.239, 
+        "MouthRightPullDown": 0.264, 
+        "LeftEyeDown": 0.117, 
+        "RightEyeDown": 0.117, 
+        "MouthLeftPullDown": 0.252, 
+        "lowerLipUp": 0.761, 
+        "RightUpperLidOpen": 0.092, 
+        "LeftBrowDown": 0.564, 
+        "UpperLipForward": 0.411
+    }, 
+    "homepage": "http://www.makehuman.org", 
+    "description": "No description set"
+}

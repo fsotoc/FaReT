@@ -1,0 +1,35 @@
+{
+    "license": "AGPL3", 
+    "name": "happy3", 
+    "copyright": "(c) MakeHuman.org 2001-2016", 
+    "tags": [
+        "no tag", 
+        "expression"
+    ], 
+    "author": "MakeHuman Team", 
+    "unit_poses": {
+        "MouthRightPullSide": 0.546, 
+        "ChinForward": 0.184, 
+        "lowerLipBackward": 0.166, 
+        "MouthRightPullUp": 0.282, 
+        "UpperLipStretched": 0.288, 
+        "MouthLeftPullUp": 0.374, 
+        "LeftInnerBrowUp": 0.515, 
+        "NasolabialDeepener": 0.497, 
+        "LeftLowerLidUp": 0.221, 
+        "LeftCheekUp": 0.865, 
+        "NoseWrinkler": 0.546, 
+        "RightInnerBrowUp": 0.497, 
+        "RightLowerLidUp": 0.215, 
+        "RightOuterBrowUp": 0.411, 
+        "RightCheekUp": 0.865, 
+        "CheeksPump": 0.141, 
+        "LeftOuterBrowUp": 0.423, 
+        "JawDropStretched": 0.006, 
+        "lowerLipUp": 0.644, 
+        "CheeksSuck": 0.276, 
+        "MouthLeftPullSide": 0.558
+    }, 
+    "homepage": "http://www.makehuman.org", 
+    "description": "No description set"
+}

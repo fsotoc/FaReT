@@ -1,0 +1,83 @@
+# Written by MakeHuman 1.1.0
+version v1.1.0
+tags AM01NE
+camera 0.0 0.0 -0.00976801788413 0.839224815951 0.0199519524326 7.6875
+modifier nose/nose-flaring-decr|incr -0.192000
+modifier nose/nose-width1-decr|incr 0.080000
+modifier cheek/r-cheek-volume-decr|incr 0.244000
+modifier eyes/l-eye-bag-in|out -0.218000
+modifier nose/nose-volume-decr|incr 0.320000
+modifier eyes/l-eye-eyefold-angle-down|up -0.302000
+modifier eyes/l-eye-epicanthus-in|out -0.004000
+modifier eyes/r-eye-height1-decr|incr 0.404000
+modifier macrodetails-universal/Muscle 0.500000
+modifier mouth/mouth-scale-horiz-decr|incr 0.294000
+modifier macrodetails/African 0.000000
+modifier cheek/r-cheek-trans-down|up -0.296000
+modifier macrodetails-proportions/BodyProportions 0.500000
+modifier neck/neck-scale-depth-decr|incr 0.762000
+modifier neck/neck-scale-horiz-decr|incr -0.080000
+modifier eyes/r-eye-bag-decr|incr 0.192000
+modifier macrodetails/Gender 1.000000
+modifier forehead/forehead-trans-backward|forward 0.012000
+modifier nose/nose-point-width-decr|incr -0.174000
+modifier macrodetails-height/Height 0.500000
+modifier eyes/r-eye-eyefold-angle-down|up -0.302000
+modifier breast/BreastSize 0.500000
+modifier mouth/mouth-scale-vert-decr|incr -0.596000
+modifier ears/r-ear-scale-decr|incr -0.370000
+modifier chin/chin-cleft-decr|incr 0.760000
+modifier eyes/r-eye-epicanthus-in|out -0.004000
+modifier nose/nose-septumangle-decr|incr -0.328000
+modifier eyes/l-eye-bag-decr|incr 0.192000
+modifier cheek/r-cheek-bones-decr|incr 0.288000
+modifier macrodetails/Age 0.500000
+modifier neck/neck-double-decr|incr 0.140000
+modifier eyes/l-eye-bag-height-decr|incr 0.030000
+modifier breast/BreastFirmness 0.500000
+modifier ears/l-ear-trans-backward|forward -0.030000
+modifier macrodetails/Asian 0.000000
+modifier eyebrows/eyebrows-angle-down|up -0.260000
+modifier cheek/l-cheek-trans-down|up -0.296000
+modifier ears/l-ear-wing-decr|incr -0.378000
+modifier ears/r-ear-wing-decr|incr -0.378000
+modifier chin/chin-prominent-decr|incr -0.132000
+modifier nose/nose-scale-depth-decr|incr 0.140000
+modifier eyes/l-eye-eyefold-concave|convex -0.166000
+modifier mouth/mouth-upperlip-middle-down|up 0.012000
+modifier head/head-fat-decr|incr -0.092000
+modifier cheek/l-cheek-bones-decr|incr 0.288000
+modifier head/head-age-decr|incr -0.264000
+modifier macrodetails/Caucasian 1.000000
+modifier nose/nose-curve-concave|convex -0.208000
+modifier eyes/r-eye-height3-decr|incr -0.158000
+modifier eyes/r-eye-bag-in|out -0.218000
+modifier cheek/l-cheek-volume-decr|incr 0.244000
+modifier eyes/r-eye-eyefold-concave|convex -0.166000
+modifier eyes/r-eye-bag-height-decr|incr 0.030000
+modifier ears/r-ear-trans-backward|forward -0.030000
+modifier nose/nose-scale-vert-decr|incr 0.668000
+modifier mouth/mouth-lowerlip-width-decr|incr -0.140000
+modifier nose/nose-compression-compress|uncompress -0.506000
+modifier mouth/mouth-cupidsbow-decr|incr 0.242000
+modifier eyes/l-eye-height1-decr|incr 0.404000
+modifier mouth/mouth-upperlip-height-decr|incr -0.030000
+modifier eyebrows/eyebrows-trans-backward|forward 0.218000
+modifier ears/l-ear-scale-decr|incr -0.370000
+modifier eyes/l-eye-height3-decr|incr -0.158000
+modifier nose/nose-scale-horiz-decr|incr -0.260000
+modifier eyes/r-eye-eyefold-down|up 0.056000
+modifier macrodetails-universal/Weight 0.500000
+modifier eyes/l-eye-eyefold-down|up 0.056000
+modifier mouth/mouth-upperlip-ext-down|up -0.268000
+modifier nose/nose-width2-decr|incr -0.416000
+modifier mouth/mouth-lowerlip-height-decr|incr -0.234000
+modifier nose/nose-width3-decr|incr 0.106000
+tongue tongue01 52ad91a3-caad-4e50-8c38-67634e5e789c
+teeth Teeth_Base 0a5ec82a-0d5f-43ce-a765-8f076f95692d
+eyebrows eyebrow012 1c16325c-7831-4166-831a-05c5b609c219
+eyes HighPolyEyes 2c12f43b-1303-432c-b7ce-d78346baf2e6
+clothesHideFaces True
+skinMaterial skins/young_caucasian_male/young_caucasian_male2.mhmat
+material HighPolyEyes 2c12f43b-1303-432c-b7ce-d78346baf2e6 eyes/materials/brown.mhmat
+subdivide True

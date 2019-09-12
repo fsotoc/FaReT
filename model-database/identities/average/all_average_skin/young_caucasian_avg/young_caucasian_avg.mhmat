@@ -1,0 +1,52 @@
+shininess 0.5 
+castShadows True
+ 
+tag young
+tag caucasian
+tag average
+
+backfaceCull True
+ 
+depthless False
+ 
+# Sub-surface scattering parameters
+ 
+wireframe False
+ 
+sssGScale 2.5 
+translucency 0.0 
+sssRScale 5.0 
+opacity 1.0 
+shader data/shaders/glsl/litsphere
+ 
+
+shaderConfig ambientOcclusion True
+shaderConfig normal False
+shaderConfig bump True
+shaderConfig displacement False
+shaderConfig vertexColors True
+shaderConfig spec True
+shaderConfig transparency True
+shaderConfig diffuse True
+
+specularColor 0.0450980392157 0.0392156862746 0.0392156862746 
+transparent False
+ 
+shaderParam litsphereTexture data/litspheres/lit_standard_skin.png
+ 
+receiveShadows True
+ 
+name young_caucasian_avg_detailed
+ 
+emissiveColor 0.196078431373 0.101960784314 0.101960784314 
+diffuseColor 1.0 1.0 1.0 
+sssBScale 1.0 
+shadeless False
+ 
+sssEnabled True
+ 
+ambientColor 0.301960784314 0.278431372549 0.278431372549 
+diffuseTexture ../textures/young_lightskinned_avg_diffuse2.png
+ 
+alphaToCoverage True
+ 

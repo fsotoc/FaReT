@@ -1,0 +1,29 @@
+{
+    "license": "AGPL3", 
+    "name": "fear", 
+    "copyright": "(c) MakeHuman.org 2001-2016", 
+    "tags": [
+        "no tag", 
+        "expression"
+    ], 
+    "author": "MakeHuman Team", 
+    "unit_poses": {
+        "UpperLipUp": 0.644, 
+        "LeftUpperLidOpen": 0.663, 
+        "LeftInnerBrowUp": 0.233, 
+        "NasolabialDeepener": 0.172, 
+        "MouthLeftPlatysma": 0.184, 
+        "MouthRightPlatysma": 0.178, 
+        "RightInnerBrowUp": 0.331, 
+        "MouthRightPullDown": 0.546, 
+        "UpperLipForward": 0.098, 
+        "RightOuterBrowUp": 0.35, 
+        "MouthLeftPullDown": 0.552, 
+        "LeftOuterBrowUp": 0.38, 
+        "JawDropStretched": 0.08, 
+        "RightUpperLidOpen": 0.669, 
+        "CheeksSuck": 0.166
+    }, 
+    "homepage": "http://www.makehuman.org", 
+    "description": "No description set"
+}

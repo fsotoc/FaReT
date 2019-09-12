@@ -1,0 +1,22 @@
+{
+    "license": "AGPL3", 
+    "name": "sadness", 
+    "copyright": "(c) MakeHuman.org 2001-2016", 
+    "tags": [
+        "no tag", 
+        "expression"
+    ], 
+    "author": "MakeHuman Team", 
+    "unit_poses": {
+        "ChinForward": 0.051, 
+        "LeftInnerBrowUp": 0.469, 
+        "RightBrowDown": 0.356, 
+        "MouthRightPullDown": 1.0, 
+        "RightInnerBrowUp": 0.65, 
+        "LeftOuterBrowUp": 0.102, 
+        "MouthLeftPullDown": 1.0, 
+        "lowerLipUp": 0.13
+    }, 
+    "homepage": "http://www.makehuman.org", 
+    "description": "No description set"
+}

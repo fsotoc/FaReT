@@ -1,0 +1,29 @@
+{
+    "license": "AGPL3", 
+    "name": "disgust", 
+    "copyright": "(c) MakeHuman.org 2001-2016", 
+    "tags": [
+        "no tag", 
+        "expression"
+    ], 
+    "author": "MakeHuman Team", 
+    "unit_poses": {
+        "LeftUpperLidClosed": 0.068, 
+        "RightCheekUp": 0.35, 
+        "LeftLowerLidUp": 0.073, 
+        "UpperLipUp": 1.0, 
+        "NasolabialDeepener": 0.944, 
+        "RightBrowDown": 0.638, 
+        "MouthRightPullDown": 0.514, 
+        "LeftCheekUp": 0.339, 
+        "RightLowerLidUp": 0.068, 
+        "RightUpperLidClosed": 0.073, 
+        "CheeksPump": 0.096, 
+        "MouthLeftPullDown": 0.61, 
+        "NoseWrinkler": 0.198, 
+        "LeftBrowDown": 0.644, 
+        "lowerLipUp": 0.52
+    }, 
+    "homepage": "http://www.makehuman.org", 
+    "description": "No description set"
+}
