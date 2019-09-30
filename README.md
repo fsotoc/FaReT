@@ -88,6 +88,10 @@ If you find FaReT useful for your research, please consider supporting the devel
   * If you forgot to select the frame first (or the GUI code deselected it after a previous Update), then you can use the **Add Frame** button instead and then remove the frame you wanted to replace/update.
 
 ## Extrapolation (i.e., "caricaturing")
+* This is just another option in the `Interpolation Render` plugin, so read the previous documentation about interpolation before proceeding.
+* To extrapolate, you will first need to define a sequence of at least two models using the **Interpolation Render** GUI (see above).
+* The only extra step is to define a percentage of extrapolation for the identity model under **Model Extrapolation Percentage** and/or a percentage of extrapolation for the expression pose model under **Expression Extrapolation Percentage**.
+
 
 # Creating average models
 * The **Average Model** menu is under the **Utilities** menu.
@@ -106,6 +110,15 @@ If you find FaReT useful for your research, please consider supporting the devel
         * If there is only one possible value, it is selected.
 
 # Standardizing models
+* The **Standardize Models** menu is under the **Utilities** menu.
+* Click on **Select an output directory** and choose a folder where you want the standardized model(s) to be stored.
+* Click on **Select an input directory** and choose a folder where you have placed the original unstandardized model(s). These should be MakeHuman models with extension `.mhm`, like the models in the database included with FaReT.
+* Click on **Select the standard model** to choose a single MakeHuman model (i.e., with extension `.mhm`) from which features will be copied for the standardization.
+* In the box labeled **Features to standardize**, you can add specific features that you want to standardize, or regular expressions that apply to several features.
+  - Each feature name or regular expression should be separated by a comma and space.
+  - To see a list with the names of all the features that you can choose from, open any of the `.mhm` files included in the FaReT database. The name of each feature is included after the keyword `modifier`.
+  - To learn about Perl regular expressions, see the documentation [here](https://perldoc.perl.org/perlre.html)
+* Once you are ready, click **Go** and you will obtain standardized models in the output directory.
 
 # Creating dynamic animations from render sequences
 ## Using GIMP plugin to create GIF files
