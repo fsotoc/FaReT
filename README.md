@@ -48,7 +48,7 @@ If you find FaReT useful for your research, please consider supporting the devel
 ## Interpolation (i.e., "morphing")
 * Go to the `Rendering` tab and then to the `Interpolation Render` sub-tab.
 * Because it is an altered version of the Render Task View, it has the same options and more (which were mostly added in the right panel).
-* ![](https://mfr.osf.io/export?url=https://osf.io/3jav4/?action=download%26mode=render%26direct%26public_file=False&initialWidth=684&childId=mfrIframe&parentTitle=OSF+%7C+IRscreen.jpeg&parentUrl=https://osf.io/3jav4/&format=2400x2400.jpeg)
+* ![](IRscreen.jpeg)
 
 * On the left, specify the folder in which you want the program to output the PNG files for each frame of the morph.
   * The images that go into that directory have a naming convention such that the first frame is MH_0000.png, the second is MH_0001.png, etc.
@@ -71,7 +71,7 @@ If you find FaReT useful for your research, please consider supporting the devel
   * By specifying an integer, you can set a specific frame (like frame 61). Integer values should start with 0 and end with the number of total frames minus one.
   * By specifying a float between 0.0 and 1.0, you can specify the proportion of the total frames (i.e., 0.5 is halfway through the animation).
   * ***Important***: there should always be one key frame that is at frame 0 (start of the morph) and one key frame that is at at 1.0 (end of the morph).
-    * ![](https://mfr.osf.io/export?url=https://osf.io/rz93e/?action=download%26mode=render%26direct%26public_file=False&initialWidth=684&childId=mfrIframe&parentTitle=OSF+%7C+Frames.jpeg&parentUrl=https://osf.io/rz93e/&format=2400x2400.jpeg)
+    * ![](Frames.jpeg)
     * Unless there is only one frame, in which case, you can have just key frame 0.
 * For ***any of the following settings***, you do not need to specify them after the first frame (unless you want them to change).
     * The **Orbit Camera Y** setting can be set to an angle (in degrees).
