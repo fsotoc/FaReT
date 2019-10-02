@@ -188,7 +188,7 @@ def divide(a, change):
     # just numbers
     if (isNumberType is not None and isNumberType(a)) or (Number is not None and isinstance(a, Number)):
         if change != 0:
-            return a / change
+            return a / float(change)
         else:
             return a
     # dictionaries
@@ -196,12 +196,12 @@ def divide(a, change):
     for key in a:
         if (isNumberType is not None and isNumberType(change)) or (Number is not None and isinstance(change, Number)):
             if change != 0:
-                quo[key] = a[key] / change
+                quo[key] = a[key] / float(change)
             else:
                 quo[key] = a[key]
         else:
             if change[key] != 0:
-                quo[key] = a[key] / change[key]
+                quo[key] = a[key] / float(change[key])
             else:
                 quo[key] = a[key]
     return quo
@@ -232,8 +232,8 @@ def interpolate_all(key_frames):
             # otherwise, get the params "as is"
             a = starting_point[change_key]
             fA = 0
-        else:
-            current_index += 1
+        #else:
+        current_index += 1
         frame_values = [a]
 
         # go through the remaining values
