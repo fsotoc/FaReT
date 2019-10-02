@@ -68,7 +68,7 @@ If you find FaReT useful for your research, please consider supporting the devel
 ### **Interpolation Settings**
 * Once you add a frame, select it to edit the interpolation settings. 
 * The **Current Frame** represents the time at which the settings listed below should be reached.
-  * By specifying an integer, you can set a specific frame (like frame 61).
+  * By specifying an integer, you can set a specific frame (like frame 61). Integer values should start with 0 and end with the number of total frames minus one.
   * By specifying a float between 0.0 and 1.0, you can specify the proportion of the total frames (i.e., 0.5 is halfway through the animation).
   * ***Important***: there should always be one key frame that is at frame 0 (start of the morph) and one key frame that is at at 1.0 (end of the morph).
     * ![](https://mfr.osf.io/export?url=https://osf.io/rz93e/?action=download%26mode=render%26direct%26public_file=False&initialWidth=684&childId=mfrIframe&parentTitle=OSF+%7C+Frames.jpeg&parentUrl=https://osf.io/rz93e/&format=2400x2400.jpeg)
@@ -76,8 +76,12 @@ If you find FaReT useful for your research, please consider supporting the devel
 * For ***any of the following settings***, you do not need to specify them after the first frame (unless you want them to change).
     * The **Orbit Camera Y** setting can be set to an angle (in degrees).
       * The value causes left-right motion to occur (positive values rotate to the head's right -- your left).
+      * These are values *in an absolute coordinate system* rather than relative to the previous frame.
+      * Better results are obtained when the sequence is planned such that each step involves an integer-valued degree of rotation
     * The **Orbit Camera X** setting can also be set to an angle (in degrees).
       * The value causes up-down motion to occur (positive values rotate to the top of the head).
+      * These are values *in an absolute coordinate system* rather than relative to the previous frame. 
+      * Better results are obtained when the sequence is planned such that each step involves an integer-valued degree of rotation
     * The **Model File** input box takes the path of a mhm file that you want to have by the current key frame.
     * The **Expression File** input box can either:
       * take an expression mhpose file or..
