@@ -77,11 +77,9 @@ If you find FaReT useful for your research, please consider supporting the devel
     * The **Orbit Camera Y** setting can be set to an angle (in degrees).
       * The value causes left-right motion to occur (positive values rotate to the head's right -- your left).
       * These are values *in an absolute coordinate system* rather than relative to the previous frame.
-      * Better results are obtained when the sequence is planned such that each step involves an integer-valued degree of rotation
     * The **Orbit Camera X** setting can also be set to an angle (in degrees).
       * The value causes up-down motion to occur (positive values rotate to the top of the head).
       * These are values *in an absolute coordinate system* rather than relative to the previous frame. 
-      * Better results are obtained when the sequence is planned such that each step involves an integer-valued degree of rotation
     * The **Model File** input box takes the path of a mhm file that you want to have by the current key frame.
     * The **Expression File** input box can either:
       * take an expression mhpose file or..
