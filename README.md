@@ -103,6 +103,8 @@ If you find FaReT useful for your research, please consider supporting the devel
     * but not:  **identity_models/male/happy/\*.mhm**
 * The **Start** button will generate the average model from the files in the input directory (this may take some time).
   * **Important**: When it finishes, be sure to use MakeHuman's normal save feature to save the average mhm file!
+    * Go to the **Files** tab, and then to the **Save** sub-tab.
+    * Choose a directory and a name for your average file, and click on "Save".
 * The remaining functions are only important if you want to generate faces within the average space (which don't always look great).
     * You can avoid re-creating the average if you **Save the Average JSON** files to the input folder you selected earlier.
       * This creates four json files that keep track of the values for the mean, standard deviation, minimums, and maximums for each parameter.
