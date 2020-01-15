@@ -84,9 +84,8 @@ def set_pose(pose_modifiers):
     posenames = []
     posevalues = []
     for pname, pval in modifiers.items():
-        if pval != 0:
-            posenames.append(pname)
-            posevalues.append(pval)
+        posenames.append(pname)
+        posevalues.append(pval)
     if len(posenames) > 0:
         panim = base_poseunit.getBlendedPose(posenames, posevalues)
         panim.disableBaking = False
