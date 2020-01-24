@@ -40,23 +40,31 @@ def get_shape_params():
         param_dict[key] = human.getModifier(key).getValue()
     return param_dict
 
+def merge_dictionaries(d1, d2):
+    for key in d1:
+        if not key in d2:
+            d2[key] = d1[key]
+    return d2
+
 def load_pose_modifiers(filename):
+    modifiers, _ = get_blank_pose()
     if filename is None or filename == "None":
-        modifiers, _ = get_blank_pose()
+        
         return modifiers
     with open(filename, 'r') as f:
-        return json.load(f, object_pairs_hook=OrderedDict)['unit_poses']
+        # need to keep all keys available from neutral expression for interpolation
+        return merge_dictionaries(modifiers, json.load(f, object_pairs_hook=OrderedDict)['unit_poses'])
     return None
 
 def delta_pose(pose_a, pose_b, over_frames, percentage):
     pose_delta = {}
     for key in pose_b:
         if not key in pose_a:
-            pose_a[key] = 0
+            pose_a[key] = 0.
 
     for key in pose_a:
         if not key in pose_b:
-            pose_b[key] = 0
+            pose_b[key] = 0.
         pose_delta[key] = (pose_b[key]-pose_a[key])*(percentage/100.)/float(over_frames)
 
     return pose_delta
@@ -84,6 +92,7 @@ def set_pose(pose_modifiers):
     posenames = []
     posevalues = []
     for pname, pval in modifiers.items():
+        #if pval != 0:
         posenames.append(pname)
         posevalues.append(pval)
     if len(posenames) > 0:
@@ -155,10 +164,10 @@ def difference(b, a, bPercent):
     diff = {}
     for key in b:
         if not key in a:
-            a[key] = 0
+            a[key] = 0.
     for key in a:
         if not key in b:
-            b[key] = 0
+            b[key] = 0.
         
         diff[key] = (b[key] - a[key])*(bPercent/100.)
     return diff
@@ -230,7 +239,7 @@ def interpolate_all(key_frames):
         if fA > 0 or a is None:
             # otherwise, get the params "as is"
             a = starting_point[change_key]
-            fA = 0
+            fA = 0.
         #else:
         current_index += 1
         frame_values = [a]
@@ -329,7 +338,7 @@ def interpolate_all_old(key_frames):
                             all_params[key][frame-1] = {}
                         for k in delta_params[key]:
                             if not k in all_params[key][frame-1]:
-                                all_params[key][frame-1][k] = 0
+                                all_params[key][frame-1][k] = 0.
                             all_params[key][frame][k] = all_params[key][frame-1][k]+delta_params[key][k]
                             value = all_params[key][frame][k]
                 else:
@@ -378,7 +387,7 @@ def interpolate_all_old(key_frames):
                     if type(all_params[key][i-1]) is not dict and type(all_params[key][i-1]) is not OrderedDict:
                         all_params[key][i-1] = {}
                     if not k in all_params[key][i-1]:
-                        all_params[key][i-1][k] = 0
+                        all_params[key][i-1][k] = 0.
                     all_params[key][i][k] = all_params[key][i-1][k]+delta_params[key][k]
             else:
                 all_params[key][i] = all_params[key][i-1]+delta_params[key]

@@ -19,11 +19,13 @@ def updateModelingParameters(dictOfParameterNameAndValue):
     mh.redraw()
 
 def load_pose_modifiers(filename):
+    modifiers, _ = get_blank_pose()
     if filename is None or filename == "None":
-        modifiers, _ = get_blank_pose()
+        
         return modifiers
     with open(filename, 'r') as f:
-        return json.load(f, object_pairs_hook=OrderedDict)['unit_poses']
+        # need to keep all keys available from neutral expression for interpolation
+        return merge_dictionaries(modifiers, json.load(f, object_pairs_hook=OrderedDict)['unit_poses'])
     return None
 
 def get_blank_pose(skip_blank_pose=False):
