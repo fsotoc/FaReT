@@ -88,7 +88,6 @@ def set_pose(pose_modifiers):
     for key in modifiers:
         if key in pose_modifiers:
             modifiers[key] = pose_modifiers[key]
-    # see which values are different so only those are updated
     posenames = []
     posevalues = []
     for pname, pval in modifiers.items():

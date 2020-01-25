@@ -88,10 +88,25 @@ class PythonMHC(communicator.Communicator):
 
     def get_model_params(self):
         return self.execute_MH("commons.get_shape_params", True, True)
+
     def load_model(self, filename):
         self.execute_MH("gui3d.app.loadHumanMHM", False, False, filename)
+
     def setFaceCamera(self):
         self.execute_MH("gui3d.app.setFaceCamera", False, False)
+
+    def zoom(self, z):
+        '''negative numbers zoom in, positive numbers zoom out.'''
+        self.execute_MH("gui3d.app.zoomCamera", False, False, z)
+
+    def setCamera(self, x, y):
+        rotation = self.execute_MH("gui3d.app.modelCamera.getRotation", True, True)
+        self.execute_MH("gui3d.app.rotateCamera", False, False, 0,x-rotation[0])
+        self.execute_MH("gui3d.app.rotateCamera", False, False, 1,y-rotation[1])
+
+    def rotateCamera(self, x, y):
+        self.execute_MH("gui3d.app.rotateCamera", False, False, 0,x)
+        self.execute_MH("gui3d.app.rotateCamera", False, False, 1,y)
 '''
 test = PythonMHC(False, sep="|||")
 settings = dict(AA=True, dimensions=(256,256), lightmapSSS=True)
