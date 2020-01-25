@@ -20,7 +20,7 @@ If you find FaReT useful for your research, please consider supporting the devel
 * [Communicating with Psychopy to render faces online](#communicating-with-psychopy-to-render-faces-online)
 
 # Installation
-## Instal pre-requisites
+## Install pre-requisites
 * You can download and install MakeHuman (stable version) from the following website: <http://www.makehumancommunity.org/content/downloads.html>. This is all you need to use FaReT and generate single face images.
 * We have also developed a GIMP plugin that generates dynamic GIF files from a sequence of images rendered from MakeHuman. To use this plugin, download and install GIMP from the following website: <https://www.gimp.org/>
 
