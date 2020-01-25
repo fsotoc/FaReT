@@ -207,6 +207,14 @@ However, for your convenience, some functions -- like load_model() -- are set up
 makehuman.load_model(filename)
 # make the camera look at the face
 makehuman.setFaceCamera()
+
+# zoom out by "10"
+makehuman.zoom(10)
+# zooming in uses negative numbers.
+#makehuman.zoom(-10)
+
+# set the orbit camera to the left.
+makehuman.setCamera(0,45)
 # retrieve the shape parameter dictionary
 params = makehuman.get_model_params()
 
@@ -238,6 +246,49 @@ image_path = makehuman.get_render(save_location, render_settings, image_number)
 #image_number+=1
 
 # $image_path can be given to ImageStim components as long as the Image is set every repeat.
+```
+```python
+# expression parameters are separate from shape parameters.
+# if you do not want to load mhpose files, neutral always uses 0's
+neutral = dict(RightInnerBrowUp=0)
+# however, you don't _have_ to use neutral as a starting point,
+#  so you can change what the interpolation percentages
+#  mean by altering the starting point.
+# other = dict(RightInnerBrowUp=.5)
+brow_expression = dict(RightInnerBrowUp=1)
+# the arguments are: starting point, ending point, percentage.
+makehuman.set_expression(neutral, brow_expression, 75)
+# if you just want to set an expression without interpolating, 
+# you can use the same one twice at 100 percent.
+# makehuman.set_expression(brow_expression, brow_expression, 100)
+```
+About camera controls:
+```python
+# rotate camera is relative to the current position,
+# but set camera takes the current position into account to negate it.
+# doing:
+makehuman.setCamera(0,0)
+makehuman.rotateCamera(0,45)
+makehuman.rotateCamera(0,45)
+# is the same as:
+makehuman.setCamera(0,90)
+```
+More about shape parameters:
+```python
+# shape parameter dictionaries do not need to be loaded from .mhm files.
+params = dict()
+params['forehead/forehead-temple-decr|incr'] = 1
+# this doesn't override other unspecified shape parameters.
+makehuman.set_model_params(params)
+```
+
+Expression parameters:
+```python
+# expression parameter dictionaries do not need to be loaded from .mhpose files either.
+params = dict()
+brow_expression['LeftInnerBrowUp'] = 1
+# unlike shape parameters, this does override other unspecified expression parameters.
+makehuman.set_expression(brow_expression,brow_expression,100)
 ```
 
 If you want to kill the server without terminating MakeHuman's process, you can send the string 'shutdown' to resume MakeHuman's normal GUI-based operations.
