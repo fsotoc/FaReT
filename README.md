@@ -291,7 +291,7 @@ brow_expression['LeftInnerBrowUp'] = 1
 makehuman.set_expression(brow_expression,brow_expression,100)
 ```
 **IMPORTANT:** 
-1. MakeHuman does not recognize numbers created using Numpy that are type 'np.int64', 'np.float64', etc. If you have created values for parameters using Numpy functions, make sure to use 'float(your_numpy_number)' as input to the MakeHuman dictionaries.
+1. MakeHuman does not recognize numbers created using Numpy that are type `np.int64`, `np.float64`, etc. If you have created values for parameters using Numpy functions, make sure to use `float(your_numpy_number)` as input to the MakeHuman dictionaries.
 2. Use absolute paths for your model files and for the folder where your rendered stimuli will be saved. Relative paths sometimes produce errors.
 
 
