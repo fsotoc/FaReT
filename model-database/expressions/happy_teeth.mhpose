@@ -1,0 +1,32 @@
+{
+    "license": "AGPL3", 
+    "name": "happy_teeth_3", 
+    "copyright": "(c) MakeHuman.org 2001-2016", 
+    "tags": [
+        "no tag", 
+        "expression"
+    ], 
+    "author": "MakeHuman Team", 
+    "unit_poses": {
+        "lowerLipDown": 0.146, 
+        "MouthRightPullSide": 0.354, 
+        "JawDrop": 0.213, 
+        "UpperLipUp": 0.164, 
+        "MouthRightPullUp": 0.518, 
+        "UpperLipStretched": 0.079, 
+        "MouthLeftPullUp": 0.518, 
+        "LeftInnerBrowUp": 0.3, 
+        "NasolabialDeepener": 0.331, 
+        "LeftCheekUp": 0.3, 
+        "RightInnerBrowUp": 0.308, 
+        "RightLowerLidUp": 0.069, 
+        "RightOuterBrowUp": 0.169, 
+        "RightCheekUp": 0.3, 
+        "LeftLowerLidUp": 0.072, 
+        "LeftOuterBrowUp": 0.187, 
+        "NoseWrinkler": 0.203, 
+        "MouthLeftPullSide": 0.359
+    }, 
+    "homepage": "http://www.makehuman.org", 
+    "description": "No description set"
+}
