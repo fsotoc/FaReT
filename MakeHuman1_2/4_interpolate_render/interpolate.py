@@ -32,6 +32,16 @@ def do_op(key_frames, starting_view, save_path = "./tmp", render_function = None
     #    json.dump(all_params, f)
     create_images(all_params, starting_view, save_path, render_function)
 
+def save_model_special(path, name, all_params, i):
+    human = gui3d.app.selectedHuman
+    filename = os.path.join(path,name + ".mhm")
+    human.save(filename)
+    # also save mhpose file if it is applicable
+    if 'expression' in all_params:
+        with open(os.path.join(path,name + ".mhpose"), 'w') as f:
+            expression = all_params['expression'][i]
+            json.dump({"unit_poses":expression}, f)
+
 def get_shape_params():
     human = gui3d.app.selectedHuman
     
@@ -434,6 +444,10 @@ def create_images(all_params, start_view = "Front", save_path="./tmp", render_fu
         #surface = grabScreen(0,0, G.windowWidth, G.windowHeight)#, 'F:/MH_screenshot.png')
         img = render_function[0](render_function[1])
         img.save(os.path.join(save_path, "MH_{0:06d}.png".format(i)))
+
+        save_models = render_function[1]['saveModels']
+        if save_models:
+            save_model_special(save_path, "MH_{0:06d}".format(i), all_params, i)
         #indices = np.where(img.data[:,:,3] == 0)
         #indices = indices[0:2]
         #img.data[indices] = (0,0,0,255)

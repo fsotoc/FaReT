@@ -50,6 +50,10 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         self.path = ""
         self.path_button = settingsBox.addWidget(gui.BrowseButton('dir', "Select an output directory"))
         self.pathBox = settingsBox.addWidget(gui.TextEdit(self.path))
+
+        self.save_models = gui.CheckBox("Save a Model per Frame")
+        settingsBox.addWidget(self.save_models)
+
         @self.path_button.mhEvent
         def onClicked(path):
             self.path = path
@@ -225,6 +229,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
             settings['AA'] = self.AAbox.selected
             settings['dimensions'] = (self.renderingWidth, self.renderingHeight)
             settings['lightmapSSS'] = self.lightmapSSS.selected and self.lightmapSSS in self.optionsWidgets
+            settings['saveModels'] = self.save_models.selected
             # change the timing of the render
             # add path output
             self.generate_key_frames()
