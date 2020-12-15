@@ -5,7 +5,7 @@
 
 Please use the following reference when you use FaReT in your research:
 
-**Hays, J. S., Wong, C., & Soto, F. (2019, September 12). FaReT: A free and open-source toolkit of three-dimensional models and software to study face perception. <https://doi.org/10.31234/osf.io/jb53v>**
+**Hays, J. S., Wong, C., & Soto, F. (in press). FaReT: A free and open-source toolkit of three-dimensional models and software to study face perception. *Behavior Research Methods.*** Get preprint [here](https://psyarxiv.com/jb53v/)
 
 If you find FaReT useful for your research, please consider supporting the developers who maintain and develop [MakeHuman](http://www.makehumancommunity.org), the free and open source 3D computer graphics software that FaReT uses to create face stimuli. You can do that in their [Patreon page](https://www.patreon.com/makehuman)
 
@@ -290,6 +290,10 @@ brow_expression['LeftInnerBrowUp'] = 1
 # unlike shape parameters, this does override other unspecified expression parameters.
 makehuman.set_expression(brow_expression,brow_expression,100)
 ```
+**IMPORTANT:** 
+1. MakeHuman does not recognize numbers created using Numpy that are type `np.int64`, `np.float64`, etc. If you have created values for parameters using Numpy functions, make sure to use `float(your_numpy_number)` as input to the MakeHuman dictionaries.
+2. Use absolute paths for your model files and for the folder where your rendered stimuli will be saved. Relative paths sometimes produce errors.
+
 
 If you want to kill the server without terminating MakeHuman's process, you can send the string 'shutdown' to resume MakeHuman's normal GUI-based operations.
 ```python
