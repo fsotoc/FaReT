@@ -5,7 +5,7 @@
 
 Please use the following reference when you use FaReT in your research:
 
-**Hays, J. S., Wong, C., & Soto, F. (in press). FaReT: A free and open-source toolkit of three-dimensional models and software to study face perception. *Behavior Research Methods.*** Get preprint [here](https://psyarxiv.com/jb53v/)
+**Hays, J. S., Wong, C., & Soto, F. (2020). [FaReT: A free and open-source toolkit of three-dimensional models and software to study face perception](https://psyarxiv.com/jb53v/). *Behavior Research Methods, 5.*(6), 2604-2622.**
 
 If you find FaReT useful for your research, please consider supporting the developers who maintain and develop [MakeHuman](http://www.makehumancommunity.org), the free and open source 3D computer graphics software that FaReT uses to create face stimuli. You can do that in their [Patreon page](https://www.patreon.com/makehuman)
 
