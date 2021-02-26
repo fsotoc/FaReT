@@ -17,6 +17,7 @@ import getpath
 import mh
 import log
 from core import G
+import re
 
 from glmodule import grabScreen
 import gui3d
@@ -25,6 +26,25 @@ import bvh
 import numpy as np
 from collections import OrderedDict
 import json
+
+#from scipy.stats import beta
+# https://people.sc.fsu.edu/~jburkardt/py_src/prob/prob.html
+import beta
+beta_cdf = beta.beta_cdf
+
+
+
+# every parameter, whether shape, expression, camera, etc
+#  should be in key_frames and might have
+# different Beta CDF rates at different times
+# except for the frames key, which is an integer, key_frames is laid out like
+#  {frames: int, key1: [(frame_data, value), keyframe2], key2:...}
+# Adding a single pair of Alpha/Beta parameters per key frame is insufficient 
+#  because the "model" and "expression" keys have unlisted subcomponents.
+# Thus, all of the alpha/beta parameters need to be added as extensions to key_frames.
+#  {frames: int, key1: [keyframe1, (frame_data, value, alpha_beta={"subcomponent1":(a,b)})], key2:...}
+# Note that the first keyframe should never have alpha_beta: the thing you are changing _to_ determines the params.
+
 
 def do_op(key_frames, starting_view, save_path = "./tmp", render_function = None):
     all_params = interpolate_all(key_frames)
@@ -141,16 +161,16 @@ def get_params(change_key):
         return 0.0
 
 def get_change(key_frames, change_key, current_index, frames):
-    print(key_frames)
-    print(change_key)
-    print(current_index)
-    print(key_frames[change_key])
+    #print(key_frames)
+    #print(change_key)
+    #print(current_index)
+    #print(key_frames[change_key])
     frame_data, value = key_frames[change_key][current_index]
     extra = None
     frame = get_frame(frame_data, frames)
     if change_key == 'expression':
-        current_percent = int(value[value.index("|")+1:])
-        value = value[:value.index("|")]
+        current_percent = value[1]
+        value = value[0]
         # there is no expression
         if value == "":
             data = None
@@ -158,8 +178,8 @@ def get_change(key_frames, change_key, current_index, frames):
             data = load_pose_modifiers(value)
             extra = current_percent
     elif change_key == "model":
-        current_percent = int(value[value.index("|")+1:])
-        value = value[:value.index("|")]
+        current_percent = value[1]
+        value = value[0]
         # it's a model name
         if value != "":
             gui3d.app.loadHumanMHM(value)
@@ -206,6 +226,19 @@ def add(a, change):
         summed[key] = a[key] + change[key]
     return summed
 
+def multiply(a, change):
+    # just numbers
+    if (isNumberType is not None and isNumberType(a)) or (Number is not None and isinstance(a, Number)):
+        return a * change
+    
+    prod = {}
+    for key in a:
+        if (isNumberType is not None and isNumberType(change)) or (Number is not None and isinstance(change, Number)):
+            prod[key] = a[key] * change
+        else:
+            prod[key] = a[key] * change[key]
+    return prod
+
 def divide(a, change):
     # just numbers
     if (isNumberType is not None and isNumberType(a)) or (Number is not None and isinstance(a, Number)):
@@ -244,12 +277,17 @@ def interpolate_all(key_frames):
     for change_key in key_frames:
         if change_key is "frames":
             continue
+        my_keys = None
+        if change_key == "model":
+            my_keys = model_keys
+        elif change_key == "expression":
+            my_keys = expression_keys
         # get the first value for the change type
         # for the starting_point
         current_index = 0
         # see if there is a predefined first frame value
         a, fA, _ = get_change(key_frames, change_key, current_index, frames)
-
+        
         if fA > 0 or a is None:
             # otherwise, get the params "as is"
             a = starting_point[change_key]
@@ -259,7 +297,7 @@ def interpolate_all(key_frames):
         frame_values = [a]
 
         # go through the remaining values
-        for _ in range(current_index, len(key_frames[change_key])):
+        for current_key_idx in range(current_index, len(key_frames[change_key])):
             # each one is b at frame fB.
             b, fB, extraB = get_change(key_frames, change_key, current_index, frames)
             # skip over any "no data" entries
@@ -271,18 +309,48 @@ def interpolate_all(key_frames):
                 # b is actually on the other side of a
                 if extraB is not None and extraB < 0:
                     b = add(a, difference_vector)
-                print("new b:",b)
+                #print("new b:",b)
                 # how many frames do you have to change
                 delta_frames = (fB-fA) # i.e., 3-0 == 3
-                print("delta frames:",delta_frames)
+                #print("delta frames:",delta_frames)
                 # the step-by-step change vector
                 change_vector = divide(difference_vector, delta_frames)
 
-                print("change_vector:",change_vector)
+                #print("change_vector:",change_vector)
 
+                initial_length = len(frame_values)
                 # apply the changes
                 for _ in range(delta_frames):
                     frame_values.append(add(frame_values[-1], change_vector))
+                # apply special cases (beta-distribution)
+                if my_keys:
+                    alpha_beta = key_frames[change_key][current_key_idx][1][-1]
+                    for abr in alpha_beta:
+                        #log.message("Seeking key "+ abr)
+                        # make abr of say: "^head,ear" to regex of "(^head|ear)"
+                        regex_abr = abr
+                        if "," in abr:
+                            tmp = abr.split(",")
+                            regex_abr = "("
+                            ltmp = len(tmp)
+                            for si,s in enumerate(tmp):
+                                regex_abr += s
+                                if si < ltmp:
+                                    regex_abr+="|"
+                            regex_abr+=")"
+                        # the same regex and alpha/beta values are used for every frame
+                        ab_regex = re.compile(regex_abr, flags=re.DOTALL)
+                        alpha,beta = alpha_beta[abr]
+                        
+                        # no need to do the last frame (it is the same whether linear or not)
+                        for delta_frame in range(delta_frames-1):
+                            x = (delta_frame+1)/delta_frames
+                            bcdf = beta_cdf(x, alpha,beta)
+                            for ab_key in my_keys:
+                                if re.match(ab_regex, ab_key):
+                                    #log.message("Matched "+ ab_key)
+                                    frame_values[initial_length + delta_frame][ab_key] = add(frame_values[initial_length-1][ab_key], multiply(difference_vector[ab_key], bcdf))
+
                 #reassign a for next time: 
                 a=b
                 fA = fB
@@ -296,123 +364,11 @@ def interpolate_all(key_frames):
         all_params[change_key] = frame_values
     return all_params
 
-def interpolate_all_old(key_frames):
-
-    original_shape_params = get_shape_params()
-    frames = int(key_frames['frames'])
-    # stores that change that occurs at every frame
-    all_params = {'rot_X':[0]*frames, 'rot_Y':[0]*frames,
-                    'expression':[0]*frames, "model":[0]*frames}
-    delta_params = {'rot_X':None, 'rot_Y':None,
-                    'expression': None, "model":None}
-    current_index = {'rot_X':0, 'rot_Y':0, 
-                    'expression':0, "model":0}
-
-    for i in range(frames):
-        # freeze values for a frame when they are assigned by a keyframe
-        fix = {'rot_X':0, 'rot_Y':0,
-                'expression':0, "model":0}
-        for key in current_index:
-            if len(key_frames[key]) <= current_index[key]:
-                continue
-
-            # the frame at which the next event occurs
-            frame = get_frame(key_frames[key][current_index[key]][0], frames)
-            value = key_frames[key][current_index[key]][1]
-            current_percent = 100
-            if i == frame:
-                if key == 'expression':
-                    current_percent = int(value[value.index("|")+1:])
-                    value = value[:value.index("|")]
-                    if value == "":
-                        continue
-                    else:
-                        value = load_pose_modifiers(value)
-                elif key == "model":
-                    current_percent = int(value[value.index("|")+1:])
-                    value = value[:value.index("|")]
-                    if value != "":
-                        gui3d.app.loadHumanMHM(value)
-                    value = get_shape_params()
-                # set the current value
-                if (key == 'expression' or key == "model") and abs(current_percent) != 100:
-                    if delta_params[key] is None:
-                        if type(value) is dict or type(value) is OrderedDict:
-                            all_params[key][frame] = value
-                        elif type(all_params[key][frame-1]) is dict or type(all_params[key][frame-1]) is OrderedDict:
-                            all_params[key][frame] = all_params[key][frame-1]
-                        else:
-                            print("VALUE", type(value), value)
-                            all_params[key][frame] = {}
-                    else:
-                        if type(all_params[key][frame]) != dict and type(all_params[key][frame]) != OrderedDict:
-                            all_params[key][frame] = {}
-                        # keep the interpolated/extrapolated data if it is available
-                        if type(all_params[key][frame-1]) != dict and type(all_params[key][frame-1]) != OrderedDict:
-                            all_params[key][frame-1] = {}
-                        for k in delta_params[key]:
-                            if not k in all_params[key][frame-1]:
-                                all_params[key][frame-1][k] = 0.
-                            all_params[key][frame][k] = all_params[key][frame-1][k]+delta_params[key][k]
-                            value = all_params[key][frame][k]
-                else:
-                    all_params[key][frame] = value
-                    
-                fix[key] = True
-                # start tracking new changes, if applicable
-                current_index[key]+=1
-                if len(key_frames[key]) > current_index[key]:
-                    next_frame = get_frame(key_frames[key][current_index[key]][0], frames)
-                    delta_frames = (next_frame - frame)#-1
-                    next_value = key_frames[key][current_index[key]][1]
-
-                    if key == 'expression':
-                        next_percent = float(next_value[next_value.index("|")+1:])
-                        next_value = next_value[:next_value.index("|")]
-                        if type(value) is dict or type(value) is OrderedDict:
-                            next_value = load_pose_modifiers(next_value)
-                            delta_params[key] = delta_pose(value, next_value, delta_frames, next_percent)
-                    elif key == "model":
-                        next_percent = float(next_value[next_value.index("|")+1:])
-                        next_value = next_value[:next_value.index("|")]
-                        if next_value != "":
-                            gui3d.app.loadHumanMHM(next_value)
-                            next_value = get_shape_params()
-                        else:
-                            next_value = {}
-                            for akey in original_shape_params:
-                                next_value[akey] = original_shape_params[akey]
-
-                        delta_params[key] = delta_shape_params(value, next_value, delta_frames, next_percent)
-                    else:
-                        delta_params[key] = (next_value-value)/float(delta_frames)
-                else:
-                    # no further changes occur on this dimension -- assign later all to current
-                    all_params[key][frame:] = (value,)*(frames-frame)
-                    delta_params[key] = None
-
-
-        for key in delta_params:
-            if fix[key] or delta_params[key] is None:
-                continue
-            if key == 'expression' or key == "model":
-                all_params[key][i] = {}
-                for k in delta_params[key]:
-                    if type(all_params[key][i-1]) is not dict and type(all_params[key][i-1]) is not OrderedDict:
-                        all_params[key][i-1] = {}
-                    if not k in all_params[key][i-1]:
-                        all_params[key][i-1][k] = 0.
-                    all_params[key][i][k] = all_params[key][i-1][k]+delta_params[key][k]
-            else:
-                all_params[key][i] = all_params[key][i-1]+delta_params[key]
-    #with open("F:/makehuman/all_params.json", 'w') as f:
-    #    json.dump(all_params, f)
-    return all_params
 # straight from MakeHuman's scripting plugin
 # changed iteritems for python 3
 def updateModelingParameters(dictOfParameterNameAndValue):
     human = gui3d.app.selectedHuman
-    log.message("SCRIPT: updateModelingParameters("+str(dictOfParameterNameAndValue)+")")
+    #log.message("SCRIPT: updateModelingParameters("+str(dictOfParameterNameAndValue)+")")
     for key, value in iter(dictOfParameterNameAndValue.items()):
         modifier = human.getModifier(key)
         modifier.setValue(value)
@@ -460,4 +416,9 @@ def updatePose():
     panim.disableBaking = True  # Faster for realtime updating a single pose
     human.refreshPose()
 
+model_keys = tuple([key for key in get_shape_params()])
+model_data_length = len(model_keys)
 
+expression_keys = ("LeftBrowDown", "RightBrowDown", "LeftOuterBrowUp", "RightOuterBrowUp", "LeftInnerBrowUp", "RightInnerBrowUp", "NoseWrinkler", "LeftUpperLidOpen", "RightUpperLidOpen", "LeftUpperLidClosed", "RightUpperLidClosed", "LeftLowerLidUp", "RightLowerLidUp", "LeftEyeDown", "RightEyeDown", "LeftEyeUp", "RightEyeUp", "LeftEyeturnRight", "RightEyeturnRight", "LeftEyeturnLeft", "RightEyeturnLeft", "LeftCheekUp", "RightCheekUp", "CheeksPump", "CheeksSuck", "NasolabialDeepener", "ChinLeft", "ChinRight", "ChinDown", "ChinForward", "lowerLipUp", "lowerLipDown", "lowerLipBackward", "lowerLipForward", "UpperLipUp", "UpperLipBackward", "UpperLipForward", "UpperLipStretched", "JawDrop", "JawDropStretched", "LipsKiss", "MouthMoveLeft", "MouthMoveRight", "MouthLeftPullUp", "MouthRightPullUp", "MouthLeftPullSide", "MouthRightPullSide", "MouthLeftPullDown", "MouthRightPullDown", "MouthLeftPlatysma", "MouthRightPlatysma", "TongueOut", "TongueUshape", "TongueUp", "TongueDown", "TongueLeft", "TongueRight", "TonguePointUp", "TonguePointDown")
+expression_data_length = len(expression_keys)
+camera_data_length = 2
