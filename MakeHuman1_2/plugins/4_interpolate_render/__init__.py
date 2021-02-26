@@ -27,6 +27,7 @@ import numpy as np
 import os
 import getpath
 from . import interpolate
+import log
 
 class InterpolateOpenGLTaskView(RenderTaskView):
 
@@ -126,8 +127,8 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         self.camY = interpolateSettingsBox.addWidget(gui.TextEdit(""))
         interpolateSettingsBox.addWidget(gui.TextView("Oribt Camera X (up-down)"))
         self.camX = interpolateSettingsBox.addWidget(gui.TextEdit(""))
+
         interpolateSettingsBox.addWidget(gui.TextView("Model File"))
-        
         self.modelBox = interpolateSettingsBox.addWidget(gui.TextEdit(""))
         self.model_button = interpolateSettingsBox.addWidget(gui.BrowseButton('open', "Select a model file"))
         @self.model_button.mhEvent
@@ -135,14 +136,65 @@ class InterpolateOpenGLTaskView(RenderTaskView):
             self.modelBox.setText(path)
         interpolateSettingsBox.addWidget(gui.TextView("Model Extrapolation Percentage"))
         self.modelPercentageBox = interpolateSettingsBox.addWidget(gui.TextEdit("100"))
-            
+        # allow alpha beta parameters
+        self.modelAlphaBetaList = interpolateSettingsBox.addWidget(gui.ListView())
+        interpolateSettingsBox.addWidget(gui.TextView("Features"))
+        self.modelFeatureBox = interpolateSettingsBox.addWidget(gui.TextEdit(".*"))
+        interpolateSettingsBox.addWidget(gui.TextView("Alpha"))
+        self.modelAlphaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
+        interpolateSettingsBox.addWidget(gui.TextView("Beta"))
+        self.modelBetaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
+        self.modelAddButton = interpolateSettingsBox.addWidget(gui.Button("Add"))
+        self.modelRemoveButton = interpolateSettingsBox.addWidget(gui.Button("Remove"))
 
         interpolateSettingsBox.addWidget(gui.TextView("Expression file (or specify 'None')"))
         self.expressionBox = interpolateSettingsBox.addWidget(gui.TextEdit(""))
         self.expression_button = interpolateSettingsBox.addWidget(gui.BrowseButton('open', "Select an expression file"))
         interpolateSettingsBox.addWidget(gui.TextView("Expression Extrapolation Percentage"))
         self.expressionPercentageBox = interpolateSettingsBox.addWidget(gui.TextEdit("100"))
-        
+        # alphas and betas for expressions
+        self.expressionAlphaBetaList = interpolateSettingsBox.addWidget(gui.ListView())
+        interpolateSettingsBox.addWidget(gui.TextView("Features"))
+        self.expressionFeatureBox = interpolateSettingsBox.addWidget(gui.TextEdit(".*"))
+        interpolateSettingsBox.addWidget(gui.TextView("Alpha"))
+        self.expressionAlphaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
+        interpolateSettingsBox.addWidget(gui.TextView("Beta"))
+        self.expressionBetaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
+        self.expressionAddButton = interpolateSettingsBox.addWidget(gui.Button("Add"))
+        self.expressionRemoveButton = interpolateSettingsBox.addWidget(gui.Button("Remove"))
+
+        @self.modelAddButton.mhEvent
+        def onClicked(event):
+            features = self.modelFeatureBox.getText()
+            alpha = float(self.modelAlphaBox.getText())
+            beta = float(self.modelBetaBox.getText())
+            self.modelAlphaBetaList.addItem('{0}: ({1:0.2f}, {2:0.2f})'.format(features, alpha, beta), data=dict(features=features, alpha=alpha, beta=beta))
+
+        @self.modelRemoveButton.mhEvent
+        def onClicked(event):
+            selected_frame = self.modelAlphaBetaList.selectedItems()
+            if len(selected_frame) == 0:
+                return
+            selected_frame = selected_frame[0]
+            new_items = [item for item in self.modelAlphaBetaList.getItems() if item is not selected_frame]
+            self.reassign(self.modelAlphaBetaList, new_items)
+
+        @self.expressionAddButton.mhEvent
+        def onClicked(event):
+            features = self.expressionFeatureBox.getText()
+            alpha = float(self.expressionAlphaBox.getText())
+            beta = float(self.expressionBetaBox.getText())
+            self.expressionAlphaBetaList.addItem('{0}: ({1:0.2f}, {2:0.2f})'.format(features, alpha, beta), data=dict(features=features, alpha=alpha, beta=beta))
+
+        @self.expressionRemoveButton.mhEvent
+        def onClicked(event):
+            selected_frame = self.expressionAlphaBetaList.selectedItems()
+            if len(selected_frame) == 0:
+                return
+            selected_frame = selected_frame[0]
+            new_items = [item for item in self.expressionAlphaBetaList.getItems() if item is not selected_frame]
+            self.reassign(self.expressionAlphaBetaList, new_items)
+
         @self.expression_button.mhEvent
         def onClicked(path):
             self.expressionBox.setText(path)
@@ -171,20 +223,46 @@ class InterpolateOpenGLTaskView(RenderTaskView):
                 return
             selected_frame = selected_frame[0]
             selected_frame.setText('Frame {0}'.format(self.currentFramesBox.getText()))
+
+            
+            # each item has a Regular expression and the alpha beta values
+            model_extra = {}
+            for item in self.modelAlphaBetaList.getItems():
+                d = item.getUserData()
+                model_extra[d['features']] = (d['alpha'], d['beta'])
+
+            expression_extra = {}
+            for item in self.expressionAlphaBetaList.getItems():
+                d = item.getUserData()
+                expression_extra[d['features']] = (d['alpha'], d['beta'])
+
+
             selected_frame.setUserData(data={"frame":self.num(self.currentFramesBox.getText()),
                                                                    "rot_Y": self.num(self.camY.getText()),
                                                                    "rot_X": self.num(self.camX.getText()),
-                                                                   "model": self.modelBox.getText()+"|"+self.modelPercentageBox.getText(),
-                                                                   "expression": self.expressionBox.getText()+"|"+self.expressionPercentageBox.getText()})
+                                                                   "model": (self.modelBox.getText(), self.num(self.modelPercentageBox.getText()), model_extra),
+                                                                   "expression": (self.expressionBox.getText(), self.num(self.expressionPercentageBox.getText()), expression_extra)})
             self.resort_frames()
+            self.generate_key_frames()
             
         @self.addFrame.mhEvent
         def onClicked(event):
-            self.interpolatedFramesList.addItem('Frame {0}'.format(self.currentFramesBox.getText()), data={"frame":self.num(self.currentFramesBox.getText()),
+            # each item has a Regular expression and the alpha beta values
+            model_extra = {}
+            for item in self.modelAlphaBetaList.getItems():
+                d = item.getUserData()
+                model_extra[d['features']] = (d['alpha'], d['beta'])
+
+            expression_extra = {}
+            for item in self.expressionAlphaBetaList.getItems():
+                d = item.getUserData()
+                expression_extra[d['features']] = (d['alpha'], d['beta'])
+
+            self.interpolatedFramesList.addItem('Frame {0}'.format(self.currentFramesBox.getText()),data={"frame":self.num(self.currentFramesBox.getText()),
                                                                    "rot_Y": self.num(self.camY.getText()),
                                                                    "rot_X": self.num(self.camX.getText()),
-                                                                   "model": self.modelBox.getText()+"|"+self.modelPercentageBox.getText(),
-                                                                   "expression": self.expressionBox.getText()+"|"+self.expressionPercentageBox.getText()})
+                                                                   "model": (self.modelBox.getText(), self.num(self.modelPercentageBox.getText()), model_extra),
+                                                                   "expression": (self.expressionBox.getText(), self.num(self.expressionPercentageBox.getText()), expression_extra)})
             self.resort_frames()
             
         @self.removeFrame.mhEvent
@@ -194,7 +272,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
                 return
             selected_frame = selected_frame[0]
             new_items = [item for item in self.interpolatedFramesList.getItems() if item is not selected_frame]
-            self.reassign(new_items)
+            self.reassign(self.interpolatedFramesList, new_items)
         
         @self.interpolatedFramesList.mhEvent
         def onClicked(item):
@@ -269,10 +347,10 @@ class InterpolateOpenGLTaskView(RenderTaskView):
                 if data[k] == "" or k == frameKey:
                     continue
                 key = str(k)
-                if key != "expression" and key != "model":
+                if key == "expression" or key == "model":
+                    self.key_frames[key].append((frame, data[k]))
+                else:
                     self.key_frames[key].append((frame, self.num(data[k])))
-                elif str(data[k])[0] != "|":
-                    self.key_frames[key].append((frame, str(data[k])))
                 
     def num(self, value):
         if not type(value) is str:
@@ -299,43 +377,55 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         indices = np.argsort(frames).reshape((-1,))
         # resort items without converting it to a numpy array
         items = [items[index] for index in indices]
-        self.reassign(items)
+        self.reassign(self.interpolatedFramesList, items)
 
     def get_data_labels(self, items):
         data = [item.getUserData() for item in items]
         labels = [item.text for item in items]
         return data, labels
 
-    def reassign(self, items):
+    def reassign(self, my_list, items):
         data, labels = self.get_data_labels(items)
         # resetting the list clears the old C/C++ object data
-        self.interpolatedFramesList.clear()
+        #self.interpolatedFramesList.clear()
+        my_list.clear()
         # re add the data
         for i, d in enumerate(data):
-            self.interpolatedFramesList.addItem(labels[i], data=d)
-
+            #self.interpolatedFramesList.addItem(labels[i], data=d)
+            my_list.addItem(labels[i], data=d)
         
     def listInterpolationFrameOptions(self, settings):
         for key in self.keybox:
-            other_key = key
-            
-            for o in settings.keys():
-                if type(o) == str:
-                    other_key = '{0}'.format(key)
+            log.message("SCRIPT: ("+key+" "+str(settings)+")")
                     
-            content = str(settings[other_key])
+            content = settings[key]
+            
             if key == "model" or key == "expression":
-                if "|" in content:
-                    percent = settings[other_key][content.index("|")+1:]
-                    self.keybox[key].setText("{0}".format(content[:content.index("|")]))
-                    if key == "model":
-                        self.modelPercentageBox.setText(percent)
-                    else:
-                        self.expressionPercentageBox.setText(percent)
+                alphaBeta = content[2]
+                percent = str(content[1])
+                content = str(content[0])
+                # add to corresponding list GUI
+                my_list = None
+                self.keybox[key].setText(content)
+                if key == "model":
+                    my_list = self.modelAlphaBetaList
+                    self.modelPercentageBox.setText(percent)
                 else:
-                    self.keybox[key].setText("{0}".format(content))
+                    my_list = self.expressionAlphaBetaList
+                    self.expressionPercentageBox.setText(percent)
+                
+                if my_list is not None:
+                    #log.message("SCRIPT: alphaBeta List("+str(alphaBeta)+")")
+                    my_list.clear()
+                    for key in alphaBeta:
+                        features = key
+                        alpha = alphaBeta[key][0]
+                        beta = alphaBeta[key][1]
+                        label = '{0}: ({1:0.2f}, {2:0.2f})'.format(features, alpha, beta)
+                        #log.message("SCRIPT: Adding("+label+")")
+                        my_list.addItem(label, data=dict(features=features, alpha=alpha, beta=beta))
             else:
-                self.keybox[key].setText("{0}".format(settings[other_key]))
+                self.keybox[key].setText("{0}".format(content))
 
     def onShow(self, event):
         RenderTaskView.onShow(self, event)
