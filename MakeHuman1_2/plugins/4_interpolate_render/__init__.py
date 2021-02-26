@@ -21,6 +21,7 @@ from . import mh2opengl
 import json
 from core import G
 import gui
+import gui3d
 from guirender import RenderTaskView
 import mh
 import numpy as np
@@ -28,8 +29,50 @@ import os
 import getpath
 from . import interpolate
 import log
+mhapi = gui3d.app.mhapi
 
 class InterpolateOpenGLTaskView(RenderTaskView):
+    def _onModelGroupChange(self,newValue):
+        text = self.modelFeatureBox.getText()
+        if text == ".*":
+            text = ""
+        elif text != "":
+            #add a comma if something else is already there
+            text+=","
+
+        if newValue == "all":
+            text = ".*"
+        elif newValue == "head":
+            text += "^head"
+        else:
+            # the other types can be taken literally
+            text += newValue
+        self.modelFeatureBox.setText(text)
+    
+    def _onExpressionGroupChange(self,newValue):
+        #Cheek, (Chin, Jaw), Brow, (Eye, Lid), (Lip, Mouth, Tongue), (Naso, Nose), 
+        # "all", "nose", "eyebrow", "eye", "mouth", "ear", "chin", "cheek"
+        text = self.expressionFeatureBox.getText()
+        if text == ".*":
+            text = ""
+        elif text != "":
+            #add a comma if something else is already there
+            text+=","
+
+        if newValue == "all":
+            text = ".*"
+        elif newValue == "Chin":
+            text += "Chin,Jaw"
+        elif newValue == "Eye":
+            text += "Eye,Lid"
+        elif newValue == "Mouth":
+            text += "Mouth,Lip,Tongue"
+        elif newValue == "Nose":
+            text += "Nose,Naso"
+        else:
+            # the other types can be taken literally
+            text += newValue
+        self.expressionFeatureBox.setText(text)
 
     def __init__(self, category):
         RenderTaskView.__init__(self, category, 'Interpolation Render')
@@ -140,12 +183,19 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         self.modelAlphaBetaList = interpolateSettingsBox.addWidget(gui.ListView())
         interpolateSettingsBox.addWidget(gui.TextView("Features"))
         self.modelFeatureBox = interpolateSettingsBox.addWidget(gui.TextEdit(".*"))
+        # recommended groups
+        self.modelGroups = ["all", "nose", "head", "forehead", "eyebrow", "eyes", "mouth", "ear", "chin", "cheek"]
+        self.modelGroupBox = mhapi.ui.createComboBox(self.modelGroups, self._onModelGroupChange)
+        interpolateSettingsBox.addWidget(self.modelGroupBox)
+
         interpolateSettingsBox.addWidget(gui.TextView("Alpha"))
         self.modelAlphaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
         interpolateSettingsBox.addWidget(gui.TextView("Beta"))
         self.modelBetaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
         self.modelAddButton = interpolateSettingsBox.addWidget(gui.Button("Add"))
         self.modelRemoveButton = interpolateSettingsBox.addWidget(gui.Button("Remove"))
+
+
 
         interpolateSettingsBox.addWidget(gui.TextView("Expression file (or specify 'None')"))
         self.expressionBox = interpolateSettingsBox.addWidget(gui.TextEdit(""))
@@ -156,12 +206,19 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         self.expressionAlphaBetaList = interpolateSettingsBox.addWidget(gui.ListView())
         interpolateSettingsBox.addWidget(gui.TextView("Features"))
         self.expressionFeatureBox = interpolateSettingsBox.addWidget(gui.TextEdit(".*"))
+        # recommended groups
+        self.expressionGroups = ["all", "Nose", "Eyebrow", "Eye", "Mouth", "Ear", "Chin", "Cheek"]
+        self.expressionGroupBox = mhapi.ui.createComboBox(self.expressionGroups, self._onExpressionGroupChange)
+        interpolateSettingsBox.addWidget(self.expressionGroupBox)
+        
         interpolateSettingsBox.addWidget(gui.TextView("Alpha"))
         self.expressionAlphaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
         interpolateSettingsBox.addWidget(gui.TextView("Beta"))
         self.expressionBetaBox = interpolateSettingsBox.addWidget(gui.TextEdit("1.0"))
         self.expressionAddButton = interpolateSettingsBox.addWidget(gui.Button("Add"))
         self.expressionRemoveButton = interpolateSettingsBox.addWidget(gui.Button("Remove"))
+
+        
 
         @self.modelAddButton.mhEvent
         def onClicked(event):
