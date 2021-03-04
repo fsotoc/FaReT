@@ -107,16 +107,20 @@ def difference_models(model1, expression1, model2, expression2):
 
     vf = np.zeros(human.mesh.r_color.shape)
     # set the rgb of the skin to the difference
+    channel = 0
     for k,v in enumerate(human.mesh.r_color):
-        for i in range(len(v)-1):
-            # alphas don't contribute because they're always 255
-            vf[k][i] = np.sum((c1[k]-c2[k])**2)*255.0
-    # the difference spans from 0 to 255
-    mx = np.max(vf)
-    vf/=mx
-    vf*=255
+        # alphas don't contribute because they're always 255
+        #vf[k][i] = np.sum((c1[k]-c2[k])**2)
+        vf[k,channel] = np.sum((c1[k]-c2[k])**2)
+    # the difference spans from 128 to 255
+    mx = np.max(vf[:,channel])
+    if mx != 0:
+        vf/=mx
+    vf *= 127+64
+    vf += 64
     # no floats allowed on the colors.
     human.mesh.r_color = np.array(np.round(vf,0), dtype=np.uint8)
+    
     # set the alpha
     human.mesh.r_color[:,3] = 255
 
@@ -153,12 +157,15 @@ def RGB_difference_models(model1, expression1, model2, expression2):
     for k,v in enumerate(human.mesh.r_color):
         for i in range(len(v)-1):
             # alphas don't contribute because they're always 255
-            vf[k][:3] = (c2[k]-c1[k])
+            vf[k,:3] = (c2[k]-c1[k])
     # the difference spans from 0 to 255, with 128 being the middle
-    human.mesh.r_color[:,3] = 0
-    mx = np.max(vf.reshape(-1))
-    vf/=mx
-    vf*=127
+    vf[:,3]=0
+    mx = np.max(np.abs(vf[:].reshape(-1)))
+    if mx != 0:
+        vf/=mx
+    # cannot allow the values to go negative, so the range (127) 
+    #  must be <= the grey minimum (128)
+    vf *= 127
     vf += 128
     # no floats allowed on the colors.
     human.mesh.r_color = np.array(np.round(vf,0), dtype=np.uint8)
