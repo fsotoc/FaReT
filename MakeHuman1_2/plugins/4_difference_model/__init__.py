@@ -36,37 +36,29 @@ class DifferenceModelTaskView(gui3d.TaskView):
 
         settingsBox = self.addLeftWidget(gui.GroupBox('Settings'))
 
-        self.pathM1 = ""
         self.pathM1_button = settingsBox.addWidget(gui.BrowseButton('open', "Select the average Model"))
-        self.pathM1Box = settingsBox.addWidget(gui.TextEdit(self.pathM1))
+        self.pathM1Box = settingsBox.addWidget(gui.TextEdit(""))
         @self.pathM1_button.mhEvent
         def onClicked(path):
-            self.pathM1 = path
-            self.pathM1Box.setText(self.pathM1)
+            self.pathM1Box.setText(path)
 
-        self.pathE1 = "None"
         self.pathE1_button = settingsBox.addWidget(gui.BrowseButton('open', "Select an expression"))
-        self.pathE1Box = settingsBox.addWidget(gui.TextEdit(self.pathE1))
+        self.pathE1Box = settingsBox.addWidget(gui.TextEdit("None"))
         @self.pathE1_button.mhEvent
         def onClicked(path):
-            self.pathE1 = path
-            self.pathE1Box.setText(self.pathE1)
+            self.pathE1Box.setText(path)
 
-        self.pathM2 = ""
         self.pathM2_button = settingsBox.addWidget(gui.BrowseButton('open', "Select another Model"))
-        self.pathM2Box = settingsBox.addWidget(gui.TextEdit(self.pathM2))
+        self.pathM2Box = settingsBox.addWidget(gui.TextEdit(""))
         @self.pathM2_button.mhEvent
         def onClicked(path):
-            self.pathM2 = path
-            self.pathM2Box.setText(self.pathM2)
+            self.pathM2Box.setText(path)
 
-        self.pathE2 = "None"
         self.pathE2_button = settingsBox.addWidget(gui.BrowseButton('open', "Select an expression"))
-        self.pathE2Box = settingsBox.addWidget(gui.TextEdit(self.pathE2))
+        self.pathE2Box = settingsBox.addWidget(gui.TextEdit("None"))
         @self.pathE2_button.mhEvent
         def onClicked(path):
-            self.pathE2 = path
-            self.pathE2Box.setText(self.pathE2)
+            self.pathE2Box.setText(path)
         
         
         self.goButton = settingsBox.addWidget(gui.Button('Start'))
@@ -78,10 +70,10 @@ class DifferenceModelTaskView(gui3d.TaskView):
 
         @self.goButton.mhEvent
         def onClicked(event):
-            model1 = self.pathM1
-            model2 = self.pathM2
-            expression1 = self.pathE1
-            expression2 = self.pathE2
+            model1 = self.pathM1Box.getText()
+            model2 = self.pathM2Box.getText()
+            expression1 = self.pathE1Box.getText()
+            expression2 = self.pathE2Box.getText()
             self.difference_skin = makehuman_difference.difference_models(model1, expression1, model2, expression2)
         
         @self.load_button.mhEvent

@@ -101,7 +101,7 @@ def difference_models(model1, expression1, model2, expression2):
     c1 = human.mesh.r_coord*1
 
     # load a built-in skin that supports changing the colors (default does not!)
-    human.mesh.material.fromFile("./data/skins/young_caucasian_male/young_caucasian_male2.mhmat")
+    human.mesh.material.fromFile(os.path.join(getpath.getSysDataPath(), "skins/young_caucasian_male/young_caucasian_male2.mhmat"))
     # get rid of the skin properties
     human.material.diffuseTexture=None
 
