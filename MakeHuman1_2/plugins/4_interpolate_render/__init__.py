@@ -61,6 +61,8 @@ class InterpolateOpenGLTaskView(RenderTaskView):
 
         if newValue == "all":
             text = ".*"
+        elif newValue == "Eyebrow":
+            text += "Brow"
         elif newValue == "Chin":
             text += "Chin,Jaw"
         elif newValue == "Eye":
