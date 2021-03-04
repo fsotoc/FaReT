@@ -117,7 +117,7 @@ class DifferenceModelTaskView(gui3d.TaskView):
                     l[i][k] = int(l[i][k])'''
 
             with open(path, 'w') as f:
-                json.dump([self.pathM1, self.pathE1, l], f)
+                json.dump([self.pathM1Box.getText(), self.pathE1Box.getText(), l], f)
 
     
     def random_between(self, avg, low, high, sd):
