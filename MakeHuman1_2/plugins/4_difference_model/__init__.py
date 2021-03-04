@@ -61,7 +61,8 @@ class DifferenceModelTaskView(gui3d.TaskView):
             self.pathE2Box.setText(path)
         
         
-        self.goButton = settingsBox.addWidget(gui.Button('Start'))
+        self.goButton = settingsBox.addWidget(gui.Button('Start Distance'))
+        self.goRGBButton = settingsBox.addWidget(gui.Button('Start RGB'))
 
         self.save_button = settingsBox.addWidget(gui.BrowseButton("save", "Save Difference JSON"))
         self.load_button = settingsBox.addWidget(gui.BrowseButton('open', 'Load Difference JSON'))
@@ -76,6 +77,16 @@ class DifferenceModelTaskView(gui3d.TaskView):
             expression2 = self.pathE2Box.getText()
             self.difference_skin = makehuman_difference.difference_models(model1, expression1, model2, expression2)
         
+
+        @self.goRGBButton.mhEvent
+        def onClicked(event):
+            model1 = self.pathM1Box.getText()
+            model2 = self.pathM2Box.getText()
+            expression1 = self.pathE1Box.getText()
+            expression2 = self.pathE2Box.getText()
+            self.difference_skin = makehuman_difference.RGB_difference_models(model1, expression1, model2, expression2)
+        
+
         @self.load_button.mhEvent
         def onClicked(path):
             # set the average model and the skin

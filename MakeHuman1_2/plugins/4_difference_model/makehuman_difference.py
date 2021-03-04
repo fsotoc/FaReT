@@ -123,3 +123,48 @@ def difference_models(model1, expression1, model2, expression2):
     # update the color
     human.mesh.sync_color()
     return human.mesh.r_color
+
+
+def RGB_difference_models(model1, expression1, model2, expression2):
+
+    # loadModel(<model name>,[path])
+    #
+    # This will load a human model from an MHM file. The <model name> part should be a string without spaces
+    # and without the .MHM extension. The [path] part defaults to the user's makehuman/models directory.
+
+    gui3d.app.loadHumanMHM(model2)
+    human = G.app.objects[0]
+    setExpression(expression2)
+    c2 = human.mesh.r_coord*1
+
+    # load the original (the average, presumably)
+    gui3d.app.loadHumanMHM(model1)
+    human = G.app.objects[0]
+    setExpression(expression1)
+    c1 = human.mesh.r_coord*1
+
+    # load a built-in skin that supports changing the colors (default does not!)
+    human.mesh.material.fromFile(os.path.join(getpath.getSysDataPath(), "skins/young_caucasian_male/young_caucasian_male2.mhmat"))
+    # get rid of the skin properties
+    human.material.diffuseTexture=None
+
+    vf = np.zeros(human.mesh.r_color.shape)
+    # set the rgb of the skin to the difference
+    for k,v in enumerate(human.mesh.r_color):
+        for i in range(len(v)-1):
+            # alphas don't contribute because they're always 255
+            vf[k][:3] = (c2[k]-c1[k])
+    # the difference spans from 0 to 255, with 128 being the middle
+    human.mesh.r_color[:,3] = 0
+    mx = np.max(vf.reshape(-1))
+    vf/=mx
+    vf*=127
+    vf += 128
+    # no floats allowed on the colors.
+    human.mesh.r_color = np.array(np.round(vf,0), dtype=np.uint8)
+    # set the alpha
+    human.mesh.r_color[:,3] = 255
+
+    # update the color
+    human.mesh.sync_color()
+    return human.mesh.r_color
