@@ -330,7 +330,6 @@ def interpolate_all(key_frames):
                 if my_keys:
                     alpha_beta = key_frames[change_key][current_key_idx][1][-1]
                     for abr in alpha_beta:
-                        
                         # make abr of say: "^head,ear" to regex of "(^head|ear)"
                         regex_abr = abr
                         if "," in abr:
@@ -338,14 +337,10 @@ def interpolate_all(key_frames):
                             regex_abr = "("
                             ltmp = len(tmp)
                             for si,s in enumerate(tmp):
-                                if s[0] !="^":
-                                    regex_abr += ".*"
                                 regex_abr += s
                                 if si < ltmp-1:
                                     regex_abr+="|"
                             regex_abr+=")"
-                        elif abr[0] != "^":
-                            regex_abr = ".*"+regex_abr
                             
                         #log.message("Seeking key "+ regex_abr+" length: "+str(len(regex_abr)))
                         # the same regex and alpha/beta values are used for every frame
@@ -357,9 +352,8 @@ def interpolate_all(key_frames):
                             x = (delta_frame+1)/delta_frames
                             bcdf = beta_cdf(x, alpha,beta)
                             for ab_key in my_keys:
-                                m=re.match(ab_regex, ab_key)
                                 #log.message("Match? "+str(m))
-                                if m:
+                                if re.search(ab_regex, ab_key):
                                     #log.message("Matched "+ ab_key +" beta proportion "+str(bcdf))
                                     frame_values[initial_length + delta_frame][ab_key] = add(frame_values[initial_length-1][ab_key], multiply(difference_vector[ab_key], bcdf))
                                 #else:

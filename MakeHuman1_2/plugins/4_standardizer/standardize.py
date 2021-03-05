@@ -14,6 +14,7 @@ import os
 import mh
 import mhmain
 import numpy as np
+import log
 
 # straight from MakeHuman's scripting plugin
 # changed iteritems for python 3
@@ -89,10 +90,13 @@ class Standardizer(object):
         keys = [k for k in self.standard_params.keys()]
         for key in keys:
             for regex in self.standard_param_regex:
-                if re.match(regex, key):
+                if re.search(regex, key):
+                    #log.message("Standard Matched "+str(regex)+" "+str(key))
                     if not key in self.standard_param_keys:
                         self.standard_param_keys.append(key)
                     break
+                #else:
+                #    log.message("Didn't Match "+str(regex)+" "+str(key))
             if not key in self.standard_param_keys:
                 del self.standard_params[key]
         
