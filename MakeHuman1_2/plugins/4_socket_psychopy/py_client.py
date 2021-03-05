@@ -1,4 +1,18 @@
 import communicator
+isNumberType = None
+Number = None
+try:
+    from numbers import Number
+except:
+    import operator
+    isNumberType = operator.isNumberType
+#import beta
+#beta_cdf = beta.beta_cdf
+from scipy.stats import beta
+beta_cdf = beta.cdf
+import re
+
+expression_keys = ("LeftBrowDown", "RightBrowDown", "LeftOuterBrowUp", "RightOuterBrowUp", "LeftInnerBrowUp", "RightInnerBrowUp", "NoseWrinkler", "LeftUpperLidOpen", "RightUpperLidOpen", "LeftUpperLidClosed", "RightUpperLidClosed", "LeftLowerLidUp", "RightLowerLidUp", "LeftEyeDown", "RightEyeDown", "LeftEyeUp", "RightEyeUp", "LeftEyeturnRight", "RightEyeturnRight", "LeftEyeturnLeft", "RightEyeturnLeft", "LeftCheekUp", "RightCheekUp", "CheeksPump", "CheeksSuck", "NasolabialDeepener", "ChinLeft", "ChinRight", "ChinDown", "ChinForward", "lowerLipUp", "lowerLipDown", "lowerLipBackward", "lowerLipForward", "UpperLipUp", "UpperLipBackward", "UpperLipForward", "UpperLipStretched", "JawDrop", "JawDropStretched", "LipsKiss", "MouthMoveLeft", "MouthMoveRight", "MouthLeftPullUp", "MouthRightPullUp", "MouthLeftPullSide", "MouthRightPullSide", "MouthLeftPullDown", "MouthRightPullDown", "MouthLeftPlatysma", "MouthRightPlatysma", "TongueOut", "TongueUshape", "TongueUp", "TongueDown", "TongueLeft", "TongueRight", "TonguePointUp", "TonguePointDown")
 
 def add(a, change):
     # just numbers
@@ -10,7 +24,6 @@ def add(a, change):
         summed[key] = a[key] + change[key]
     return summed
 
-from numbers import Number
 def difference(b, a, bPercent):
     # get the difference between the values
     # if the values are dictionaries, make sure to assign values of 0 when the keys do not exist
@@ -27,6 +40,20 @@ def difference(b, a, bPercent):
         
         diff[key] = (b[key] - a[key])*(bPercent/100.)
     return diff
+    
+def multiply(a, change):
+    # just numbers
+    if (isNumberType is not None and isNumberType(a)) or (Number is not None and isinstance(a, Number)):
+        return a * change
+    
+    prod = {}
+    for key in a:
+        if (isNumberType is not None and isNumberType(change)) or (Number is not None and isinstance(change, Number)):
+            prod[key] = a[key] * change
+        else:
+            prod[key] = a[key] * change[key]
+    return prod
+
 # opens a connection to MH
 class PythonMHC(communicator.Communicator):
     def __init__(self, server = False, host='localhost', port=55250, amount=1024, sep="|||"):
@@ -75,9 +102,45 @@ class PythonMHC(communicator.Communicator):
         emotion_modifiers = self.execute_MH("commons.load_pose_modifiers", True, True,emotion_file)
         return neutral_modifiers, emotion_modifiers
 
-    def set_expression(self, neutral_modifiers, emotion_modifiers, bPercent):
-        # compute the appropriate contrast by percentage.
+    def set_expression(self, neutral_modifiers, emotion_modifiers, bPercent, alpha_beta=None):
+        # example alpha_beta = {"^head":(0.5,1.0)}
+        # compute the appropriate linear contrast by percentage.
         change = difference(emotion_modifiers, neutral_modifiers, bPercent)
+
+        # if parameters for beta cdf are included, modify them to get the nonlinear values
+        if alpha_beta:
+            for abr in alpha_beta:
+                # make abr of say: "^head,ear" to regex of "(^head|.*ear)"
+                regex_abr = abr
+                if "," in abr:
+                    tmp = abr.split(",")
+                    regex_abr = "("
+                    ltmp = len(tmp)
+                    for si,s in enumerate(tmp):
+                        if s[0] !="^":
+                            regex_abr += ".*"
+                        regex_abr += s
+                        if si < ltmp-1:
+                            regex_abr+="|"
+                    regex_abr+=")"
+                elif abr[0] != "^":
+                    regex_abr = ".*"+regex_abr
+                    
+                #log.message("Seeking key "+ regex_abr+" length: "+str(len(regex_abr)))
+                ab_regex = re.compile(regex_abr, flags=re.DOTALL)
+                alpha,beta = alpha_beta[abr]
+                
+                x = bPercent/100.0
+                bcdf = beta_cdf(x, alpha,beta)
+                for ab_key in neutral_modifiers:
+                    m=re.match(ab_regex, ab_key)
+                    #log.message("Match? "+str(m))
+                    if m:
+                        #log.message("Matched "+ ab_key +" beta proportion "+str(bcdf))
+                        change[ab_key] = multiply(change[ab_key], bcdf)
+                    #else:
+                    #    log.message("Didn't Match "+ ab_key)
+
         # add the contrast to the base point.
         expression_dict = add(neutral_modifiers, change)
         # we don't need to get anything from set pose, so just set it.
@@ -88,6 +151,7 @@ class PythonMHC(communicator.Communicator):
 
     def get_model_params(self):
         return self.execute_MH("commons.get_shape_params", True, True)
+
     def load_model(self, filename):
         self.execute_MH("gui3d.app.loadHumanMHM", False, False, filename)
     def setFaceCamera(self):
@@ -98,9 +162,9 @@ settings = dict(AA=True, dimensions=(256,256), lightmapSSS=True)
 image_number = 0
 try:
     #model_params = test.get_model_params()
-    neutral, anger = test.load_expression("C:/Users/jason/Documents/_Research/makehuman/expressions/Anger.mhpose")
-    test.set_expression(neutral, anger, 50)
-    image_path = test.get_render("C:/Users/jason/Documents/_PythonTools/MakeHuman/4_socket_psychopy/", settings, image_number)
+    neutral, anger = test.load_expression("C:/Users/jason/Documents/_Research/makehuman/expressions/disgust_tongue.mhpose")
+    test.set_expression(neutral, anger, 50, alpha_beta={"Lip":(.5,1.0)})
+    image_path = test.get_render("C:/Users/jason/Documents/_PythonTools/MakeHuman1_2/4_socket_psychopy/", settings, image_number)
 except Exception as e:
     print(e)
     test.send("shutdown")

@@ -18,6 +18,12 @@ def updateModelingParameters(dictOfParameterNameAndValue):
     human.applyAllTargets()
     mh.redraw()
 
+def merge_dictionaries(d1, d2):
+    for key in d1:
+        if not key in d2:
+            d2[key] = d1[key]
+    return d2
+
 def load_pose_modifiers(filename):
     modifiers, _ = get_blank_pose()
     if filename is None or filename == "None":
