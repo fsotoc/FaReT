@@ -117,14 +117,10 @@ class PythonMHC(communicator.Communicator):
                     regex_abr = "("
                     ltmp = len(tmp)
                     for si,s in enumerate(tmp):
-                        if s[0] !="^":
-                            regex_abr += ".*"
                         regex_abr += s
                         if si < ltmp-1:
                             regex_abr+="|"
                     regex_abr+=")"
-                elif abr[0] != "^":
-                    regex_abr = ".*"+regex_abr
                     
                 #log.message("Seeking key "+ regex_abr+" length: "+str(len(regex_abr)))
                 ab_regex = re.compile(regex_abr, flags=re.DOTALL)
@@ -133,13 +129,8 @@ class PythonMHC(communicator.Communicator):
                 x = bPercent/100.0
                 bcdf = beta_cdf(x, alpha,beta)
                 for ab_key in neutral_modifiers:
-                    m=re.match(ab_regex, ab_key)
-                    #log.message("Match? "+str(m))
-                    if m:
-                        #log.message("Matched "+ ab_key +" beta proportion "+str(bcdf))
+                    if re.search(ab_regex, ab_key):
                         change[ab_key] = multiply(change[ab_key], bcdf)
-                    #else:
-                    #    log.message("Didn't Match "+ ab_key)
 
         # add the contrast to the base point.
         expression_dict = add(neutral_modifiers, change)
