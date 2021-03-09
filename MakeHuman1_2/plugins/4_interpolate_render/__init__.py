@@ -71,6 +71,25 @@ class InterpolateOpenGLTaskView(RenderTaskView):
             text += "Mouth,Lip,Tongue"
         elif newValue == "Nose":
             text += "Nose,Naso"
+
+        elif newValue == "Left Eyebrow":
+            text += "Left.*Brow"
+        elif newValue == "Left Chin":
+            text += "ChinLeft,Jaw"
+        elif newValue == "Left Eye":
+            text += "Left.*Eye,Left.*Lid"
+        elif newValue == "Left Mouth":
+            text += "Mouth.*Left,Lip,TongueLeft"
+
+        elif newValue == "Right Eyebrow":
+            text += "Right.*Brow"
+        elif newValue == "Right Chin":
+            text += "ChinRight,Jaw"
+        elif newValue == "Right Eye":
+            text += "Right.*Eye,Right.*Lid"
+        elif newValue == "Right Mouth":
+            text += "Mouth.*Right,Lip,TongueRight"
+
         else:
             # the other types can be taken literally
             text += newValue
@@ -209,7 +228,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         interpolateSettingsBox.addWidget(gui.TextView("Features"))
         self.expressionFeatureBox = interpolateSettingsBox.addWidget(gui.TextEdit(".*"))
         # recommended groups
-        self.expressionGroups = ["all", "Nose", "Eyebrow", "Eye", "Mouth", "Ear", "Chin", "Cheek"]
+        self.expressionGroups = ["all", "Nose", "Eyebrow", "Eye", "Mouth", "Chin", "Cheek", "Left Eyebrow", "Left Chin", "Left Eye", "Left Mouth", "Right Eyebrow", "Right Chin", "Right Eye", "Right Mouth"]
         self.expressionGroupBox = mhapi.ui.createComboBox(self.expressionGroups, self._onExpressionGroupChange)
         interpolateSettingsBox.addWidget(self.expressionGroupBox)
         
