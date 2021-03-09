@@ -102,10 +102,12 @@ class PythonMHC(communicator.Communicator):
         emotion_modifiers = self.execute_MH("commons.load_pose_modifiers", True, True,emotion_file)
         return neutral_modifiers, emotion_modifiers
 
-    def set_expression(self, neutral_modifiers, emotion_modifiers, bPercent, alpha_beta=None):
+    def set_expression(self, neutral_modifiers, emotion_modifiers, bPercent, alpha_beta=None, bMaxPercent=100.0):
         # example alpha_beta = {"^head":(0.5,1.0)}
         # compute the appropriate linear contrast by percentage.
         change = difference(emotion_modifiers, neutral_modifiers, bPercent)
+        # for beta_cdf, you want to specify the nonlinear transform to the percentage later
+        changeAB = difference(emotion_modifiers, neutral_modifiers, bMaxPercent)
 
         # if parameters for beta cdf are included, modify them to get the nonlinear values
         if alpha_beta:
@@ -126,11 +128,11 @@ class PythonMHC(communicator.Communicator):
                 ab_regex = re.compile(regex_abr, flags=re.DOTALL)
                 alpha,beta = alpha_beta[abr]
                 
-                x = bPercent/100.0
+                x = bPercent/bMaxPercent
                 bcdf = beta_cdf(x, alpha,beta)
                 for ab_key in neutral_modifiers:
                     if re.search(ab_regex, ab_key):
-                        change[ab_key] = multiply(change[ab_key], bcdf)
+                        change[ab_key] = multiply(changeAB[ab_key], bcdf)
 
         # add the contrast to the base point.
         expression_dict = add(neutral_modifiers, change)
@@ -143,6 +145,42 @@ class PythonMHC(communicator.Communicator):
     def get_model_params(self):
         return self.execute_MH("commons.get_shape_params", True, True)
 
+    def set_model_params_beta_cdf(self, paramsA, paramsB, bPercent, alpha_beta=None, bMaxPercent=100.0):
+        # example alpha_beta = {"^head":(0.5,1.0)}
+        # compute the appropriate linear contrast by percentage.
+        change = difference(paramsA, paramsB, bPercent)
+        changeAB = difference(paramsA, paramsB, bMaxPercent)
+
+        # if parameters for beta cdf are included, modify them to get the nonlinear values
+        if alpha_beta:
+            for abr in alpha_beta:
+                # make abr of say: "^head,ear" to regex of "(^head|.*ear)"
+                regex_abr = abr
+                if "," in abr:
+                    tmp = abr.split(",")
+                    regex_abr = "("
+                    ltmp = len(tmp)
+                    for si,s in enumerate(tmp):
+                        regex_abr += s
+                        if si < ltmp-1:
+                            regex_abr+="|"
+                    regex_abr+=")"
+                    
+                #log.message("Seeking key "+ regex_abr+" length: "+str(len(regex_abr)))
+                ab_regex = re.compile(regex_abr, flags=re.DOTALL)
+                alpha,beta = alpha_beta[abr]
+                
+                x = bPercent/bMaxPercent
+                bcdf = beta_cdf(x, alpha,beta)
+                for ab_key in paramsA:
+                    if re.search(ab_regex, ab_key):
+                        change[ab_key] = multiply(changeAB[ab_key], bcdf)
+
+        # add the contrast to the base point.
+        paramsC = add(paramsA, change)
+        # we don't need to get anything from set pose, so just set it.
+        self.execute_MH("commons.updateModelingParameters", False,False, paramsC)
+
     def load_model(self, filename):
         self.execute_MH("gui3d.app.loadHumanMHM", False, False, filename)
     def setFaceCamera(self):
@@ -152,9 +190,15 @@ test = PythonMHC(False, sep="|||")
 settings = dict(AA=True, dimensions=(256,256), lightmapSSS=True)
 image_number = 0
 try:
-    #model_params = test.get_model_params()
-    neutral, anger = test.load_expression("C:/Users/jason/Documents/_Research/makehuman/expressions/disgust_tongue.mhpose")
-    test.set_expression(neutral, anger, 50, alpha_beta={"Lip":(.5,1.0)})
+    test.load_model("C:/Users/jason/Documents/_Research/makehuman/identity-average-models/female_average.mhm")
+    model_paramsA = test.get_model_params()
+    test.load_model("C:/Users/jason/Documents/_Research/makehuman/identity-average-models/male_average.mhm")
+    model_paramsB = test.get_model_params()
+    # target "eyes" and "eyebrow" strings with regex.
+    test.set_model_params_beta_cdf(model_paramsA, model_paramsB, 10.0, {"eye": (.001,1)})
+    #neutral, anger = test.load_expression("C:/Users/jason/Documents/_Research/makehuman/expressions/disgust_tongue.mhpose")
+    #test.set_expression(neutral, anger, 50, alpha_beta={"Lip":(.5,1.0)})
+    
     image_path = test.get_render("C:/Users/jason/Documents/_PythonTools/MakeHuman1_2/4_socket_psychopy/", settings, image_number)
 except Exception as e:
     print(e)
