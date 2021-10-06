@@ -91,7 +91,7 @@ def get_range(shape_parameter):
         return -1.0, 1.0
     return 0.0, 1.0
 
-def generate_CI_info(base_model, trials, shape_parameters, pose_parameters, save_path, SD=.3, rot_X=0, rot_Y=0, material_file="young_caucasian_avg", render_function=None):
+def generate_CI_info(base_model, base_expression, trials, shape_parameters, pose_parameters, save_path, SD=.3, rot_X=0, rot_Y=0, material_file="young_caucasian_avg", render_function=None):
     # the base_model is a path to the model
     # the shape parameters and pose_parameters are lists of parameters to use (convert to regex)
     gui3d.app.loadHumanMHM(base_model)
@@ -105,11 +105,12 @@ def generate_CI_info(base_model, trials, shape_parameters, pose_parameters, save
     gui3d.app.rotateCamera(1,rot_Y-rotation[1])
 
     shapes = get_listed_shape_params(model_keys)#get_shape_params()
-    poses,_ = get_blank_pose()
+    poses = load_pose_modifiers(base_expression)
+    #log.message(poses)
     shape_keys_to_jitter = get_keys(shape_parameters, model_keys)
     expression_keys_to_jitter = get_keys(pose_parameters, expression_keys)
     #shapes = merge_dictionaries(shapes, dict(zip(model_keys, [0]*model_data_length)))
-    poses = merge_dictionaries(poses, dict(zip(expression_keys, [0]*expression_data_length)))
+    #poses = merge_dictionaries(poses, dict(zip(expression_keys, [0]*expression_data_length)))
 
     df = DataFrame()
 
@@ -154,7 +155,7 @@ def generate_CI_info(base_model, trials, shape_parameters, pose_parameters, save
         
         df.append(all_data)
         updateModelingParameters(my_shapes)
-        set_pose(poses)
+        set_pose(my_poses)
         gui3d.app.redraw()
 
         if render_function:
@@ -193,7 +194,7 @@ def generate_CI_info(base_model, trials, shape_parameters, pose_parameters, save
 
         df.append(all_data)
         updateModelingParameters(my_shapes)
-        set_pose(poses)
+        set_pose(my_poses)
         gui3d.app.redraw()
 
         if render_function:
@@ -236,7 +237,7 @@ def merge_dictionaries(d1, d2):
 
 def load_pose_modifiers(filename):
     modifiers, _ = get_blank_pose()
-    if filename is None or filename == "None":
+    if filename is None or filename == "None" or filename == "":
         
         return modifiers
     with open(filename, 'r') as f:
@@ -273,9 +274,8 @@ def set_pose(pose_modifiers):
     human = gui3d.app.selectedHuman
     modifiers, base_poseunit = get_blank_pose()
 
-    for key in modifiers:
-        if key in pose_modifiers:
-            modifiers[key] = pose_modifiers[key]
+    for key in pose_modifiers:
+        modifiers[key] = pose_modifiers[key]
     # see which values are different so only those are updated
     posenames = []
     posevalues = []

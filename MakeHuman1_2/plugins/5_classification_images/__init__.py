@@ -174,7 +174,7 @@ class ClassificationImagesOpenGLTaskView(RenderTaskView):
         @self.model_button.mhEvent
         def onClicked(path):
             self.modelBox.setText(path)
-        
+
         self.modelFeatureList = classificationImagesSettingsBox.addWidget(gui.ListView())
         classificationImagesSettingsBox.addWidget(gui.TextView("Features"))
         self.modelFeatureBox = classificationImagesSettingsBox.addWidget(gui.TextEdit(".*"))
@@ -185,6 +185,12 @@ class ClassificationImagesOpenGLTaskView(RenderTaskView):
         self.modelAddButton = classificationImagesSettingsBox.addWidget(gui.Button("Add"))
         self.modelRemoveButton = classificationImagesSettingsBox.addWidget(gui.Button("Remove"))
         
+
+        self.expressionBox = classificationImagesSettingsBox.addWidget(gui.TextEdit(""))
+        self.expression_button = classificationImagesSettingsBox.addWidget(gui.BrowseButton('open', "Select an expression file"))
+        @self.expression_button.mhEvent
+        def onClicked(path):
+            self.expressionBox.setText(path)
         self.expressionFeatureList = classificationImagesSettingsBox.addWidget(gui.ListView())
         classificationImagesSettingsBox.addWidget(gui.TextView("Features"))
         self.expressionFeatureBox = classificationImagesSettingsBox.addWidget(gui.TextEdit(".*"))
@@ -263,6 +269,7 @@ class ClassificationImagesOpenGLTaskView(RenderTaskView):
             #log.message("Shape parameters "+shape_parameters)
             _,pose_parameters = self.get_data_labels(self.expressionFeatureList.getItems())
             CI_settings = dict(base_model = self.modelBox.getText(),
+                                base_expression = self.expressionBox.getText(),
                                 trials = int(self.trialsBox.getText()),
                                 shape_parameters = shape_parameters,
                                 pose_parameters=pose_parameters,
