@@ -137,7 +137,8 @@ def generate_CI_info(base_model, base_expression, trials, shape_parameters, pose
                     
             all_data[key] = my_shapes[key]
         
-        start, end = 0.0,1.0
+        #start, end = 0.0,1.0
+        start, end = -1.0,1.0
         frac_range = SD*(end-start)
         for key in my_poses:
             if key in expression_keys_to_jitter:
@@ -181,7 +182,8 @@ def generate_CI_info(base_model, base_expression, trials, shape_parameters, pose
                     
             all_data[key] = my_shapes[key]
         
-        start, end = 0.0,1.0
+        #start, end = 0.0,1.0
+        start, end = -1.0,1.0
         frac_range = SD*(end-start)
         for key in my_poses:
             if key in expression_keys_to_jitter:
