@@ -132,7 +132,23 @@ def generate_CI_info(base_model, base_expression, trials, shape_parameters, pose
                         value = my_shapes[key]
                         alter = np.random.normal(0, SD*(end-start))
                         if value+alter >= start and value+alter <= end and value-alter >= start and value-alter <= end:
-                            my_shapes[key] += alter
+                            if "/r-" in key:
+                                key2 = key.replace("/r-", "/l-")
+                                my_shapes[key] += alter
+                                if key2 in shape_keys_to_jitter:
+                                    # make the left one change by the same amount if it is in the keys to jitter
+                                    my_shapes[key2] = shapes[key2] + alter
+                                    all_data[key2] = my_shapes[key2]
+                            elif "/l-" in key:
+                                key2 = key.replace("/l-", "/r-")
+                                if key2 in shape_keys_to_jitter:
+                                    # just keep them together
+                                    all_data[key2] = my_shapes[key2]
+                                else:
+                                    # right wasn't a key they wanted, so go ahead.
+                                    my_shapes[key] += alter
+                            else:
+                                my_shapes[key] += alter
                             break
                     
             all_data[key] = my_shapes[key]
@@ -149,7 +165,25 @@ def generate_CI_info(base_model, base_expression, trials, shape_parameters, pose
                         value = my_poses[key]
                         alter = np.random.normal(0, frac_range)
                         if value+alter >= start and value+alter <= end and value-alter >= start and value-alter <= end:
-                            my_poses[key] += alter
+                            
+                            if "Right" in key:
+                                key2 = key.replace("Right", "Left")
+                                my_poses[key] += alter
+                                if key2 in expression_keys_to_jitter:
+                                    # make the left one change by the same amount if it is in the keys to jitter
+                                    my_poses[key2] = poses[key2] + alter
+                                    all_data[key2] = my_poses[key2]
+                                
+                            elif "Left" in key:
+                                key2 = key.replace("Left", "Right")
+                                if key2 in expression_keys_to_jitter:
+                                    # just keep them together
+                                    all_data[key2] = my_poses[key2]
+                                else:
+                                    # right wasn't a key they wanted, so go ahead.
+                                    my_poses[key] += alter
+                            else:
+                                my_poses[key] += alter
                             break
                         
             all_data[key] = my_poses[key]
