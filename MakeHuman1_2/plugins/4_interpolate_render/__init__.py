@@ -192,6 +192,9 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         interpolateSettingsBox.addWidget(gui.TextView("Oribt Camera X (up-down)"))
         self.camX = interpolateSettingsBox.addWidget(gui.TextEdit(""))
 
+        interpolateSettingsBox.addWidget(gui.TextView("Zoom Factor (8.7 for default face cam)"))
+        self.camZ = interpolateSettingsBox.addWidget(gui.TextEdit(""))
+
         interpolateSettingsBox.addWidget(gui.TextView("Model File"))
         self.modelBox = interpolateSettingsBox.addWidget(gui.TextEdit(""))
         self.model_button = interpolateSettingsBox.addWidget(gui.BrowseButton('open', "Select a model file"))
@@ -282,6 +285,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         self.keybox = {"frame": self.currentFramesBox,
                        "rot_Y" : self.camY,
                        "rot_X" : self.camX,
+                       "cam_Z" : self.camZ,
                        "model" : self.modelBox,
                        "expression" : self.expressionBox}
 
@@ -318,6 +322,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
             selected_frame.setUserData(data={"frame":self.num(self.currentFramesBox.getText()),
                                                                    "rot_Y": self.num(self.camY.getText()),
                                                                    "rot_X": self.num(self.camX.getText()),
+                                                                   "cam_Z": self.num(self.camZ.getText()),
                                                                    "model": (self.modelBox.getText(), self.num(self.modelPercentageBox.getText()), model_extra),
                                                                    "expression": (self.expressionBox.getText(), self.num(self.expressionPercentageBox.getText()), expression_extra)})
             self.resort_frames()
@@ -339,6 +344,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
             self.interpolatedFramesList.addItem('Frame {0}'.format(self.currentFramesBox.getText()),data={"frame":self.num(self.currentFramesBox.getText()),
                                                                    "rot_Y": self.num(self.camY.getText()),
                                                                    "rot_X": self.num(self.camX.getText()),
+                                                                   "cam_Z": self.num(self.camZ.getText()),
                                                                    "model": (self.modelBox.getText(), self.num(self.modelPercentageBox.getText()), model_extra),
                                                                    "expression": (self.expressionBox.getText(), self.num(self.expressionPercentageBox.getText()), expression_extra)})
             self.resort_frames()
@@ -408,7 +414,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
             for change in self.key_frames[key]:
                 frame = change[0]
                 if not frame in candidates:
-                    candidates[frame] = {'frame':frame, 'rot_X':"", 'rot_Y':"", 'model':"", 'expression':""}
+                    candidates[frame] = {'frame':frame, 'rot_X':"", 'rot_Y':"", 'cam_Z':"", 'model':"", 'expression':""}
                 value = change[1]
                 candidates[frame][key] = value
         for frame in candidates:
@@ -416,7 +422,7 @@ class InterpolateOpenGLTaskView(RenderTaskView):
         
     def generate_key_frames(self):
         # generate the keyframes from the current data.
-        self.key_frames = {'frames':self.num(self.framesBox.getText()), 'rot_X':[], 'rot_Y':[], 'model':[], 'expression':[]}
+        self.key_frames = {'frames':self.num(self.framesBox.getText()), 'rot_X':[], 'rot_Y':[], 'cam_Z':[], 'model':[], 'expression':[]}
         for item in self.interpolatedFramesList.getItems():
             data = item.getUserData()
             frameKey = 'frame'

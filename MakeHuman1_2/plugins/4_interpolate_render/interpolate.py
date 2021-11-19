@@ -157,10 +157,12 @@ def get_params(change_key):
         return load_pose_modifiers("None")
     elif change_key == 'model':
         return get_shape_params()
+    elif change_key == "cam_Z":
+        return gui3d.app.modelCamera.zoomFactor
     elif change_key == "rot_X":
-        gui3d.app.modelCamera.getRotation()[0]
+        return gui3d.app.modelCamera.getRotation()[0]
     elif change_key == "rot_Y":
-        gui3d.app.modelCamera.getRotation()[1]
+        return gui3d.app.modelCamera.getRotation()[1]
     else:
         return 0.0
 
@@ -169,6 +171,8 @@ def get_change(key_frames, change_key, current_index, frames):
     #print(change_key)
     #print(current_index)
     #print(key_frames[change_key])
+    if len(key_frames[change_key])-1 < current_index:
+        return None, 0,0
     frame_data, value = key_frames[change_key][current_index]
     extra = None
     frame = get_frame(frame_data, frames)
@@ -403,6 +407,8 @@ def create_images(all_params, start_view = "Front", save_path="./tmp", render_fu
                 gui3d.app.rotateCamera(0,all_params[key][i]-all_params[key][i-1])
             elif key == 'rot_Y':
                 gui3d.app.rotateCamera(1,all_params[key][i]-all_params[key][i-1])
+            elif key == 'cam_Z':
+                gui3d.app.modelCamera.setZoomFactor(all_params[key][i])
         gui3d.app.redraw()
         # get the picture
         #surface = grabScreen(0,0, G.windowWidth, G.windowHeight)#, 'F:/MH_screenshot.png')
