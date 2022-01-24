@@ -23,7 +23,10 @@ class FaceGeneratorTaskView(gui3d.TaskView):
         self.assign_skin_box = buttonsBox.addWidget(gui.CheckBox("Assign Skin"))
         self.avg_skin_box = buttonsBox.addWidget(gui.CheckBox("Assign Average Skin"))
         self.rando_gender_box = buttonsBox.addWidget(gui.CheckBox("Randomize Gender"))
-        
+        self.rando_race_box = buttonsBox.addWidget(gui.CheckBox("Randomize Race"))
+        self.rando_brow_box = buttonsBox.addWidget(gui.CheckBox("Randomize Brows")) 
+        self.rando_eye_box = buttonsBox.addWidget(gui.CheckBox("Randomize Eyes"))
+
         buttonsBox.addWidget(gui.TextView("Number of Sample Faces to use per face"))
         self.samplesUsed = buttonsBox.addWidget(gui.TextEdit("10"))
 
@@ -94,12 +97,9 @@ class FaceGeneratorTaskView(gui3d.TaskView):
 
             for i in range(faceCount):
                 # make face
-                faceX = face_generator.make_new_face(avg, radius, rest, faces_used)
-                face_generator.write_mimic_file(self.path_exemplar, os.path.join(self.path_out,"face{0:03d}.mhm".format(i)), keys, faceX, self.assign_skin_box.selected, self.avg_skin_box.selected, self.rando_gender_box.selected)
+                faceX = face_generator.make_new_face(avg, rest)
+                face_generator.write_mimic_file(self.path_exemplar, os.path.join(self.path_out,"face{0:03d}.mhm".format(i)), keys, faceX, self.assign_skin_box.selected, self.avg_skin_box.selected, self.rando_gender_box.selected, self.rando_race_box.selected, self.rando_brow_box.selected,  self.rando_eye_box.selected)
 
-            
-            
-            
 
     def onShow(self, event):
         gui3d.TaskView.onShow(self, event)
