@@ -27,9 +27,6 @@ class FaceGeneratorTaskView(gui3d.TaskView):
         self.rando_brow_box = buttonsBox.addWidget(gui.CheckBox("Randomize Brows")) 
         self.rando_eye_box = buttonsBox.addWidget(gui.CheckBox("Randomize Eyes"))
 
-        buttonsBox.addWidget(gui.TextView("Number of Sample Faces to use per face"))
-        self.samplesUsed = buttonsBox.addWidget(gui.TextEdit("10"))
-
         self.path_out = ""
         self.path_button_out = buttonsBox.addWidget(gui.BrowseButton('dir', "Select an output directory"))
         self.out_path_box = buttonsBox.addWidget(gui.TextEdit(self.path_out))
@@ -67,7 +64,7 @@ class FaceGeneratorTaskView(gui3d.TaskView):
 
             # how many faces should be made?
             faceCount = int(self.faceCount.getText())
-            faces_used = int(self.samplesUsed.getText())
+            
             avg = None
             all_stuff = None
             keys = None

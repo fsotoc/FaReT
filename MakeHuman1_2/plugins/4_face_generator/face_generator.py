@@ -8,13 +8,9 @@
 """
 
 # common needs (without rendering)
-import gui3d
 from glob import glob
 import os
-import mh
-import mhmain
 import numpy as np
-import log
 
 import re
 modifier_pattern = re.compile("modifier\s([^\s]+)\s([^\s]+)")
