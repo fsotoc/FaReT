@@ -303,6 +303,91 @@ If you want to kill the server without terminating MakeHuman's process, you can 
 # button again before you want to start the next PsychoPy Run.
 makehuman.send('shutdown')
 ```
+## Generating a random face model in each trial and rendering it online
+
+The code below uses code from the random face generator plugin to create a random face model, then opens a connection with MakeHuman to render the created model. It can be used to generate and display a different random face in each trial of an experiment, with control over what features are fixed vs. random. You would usually want to do this ahead of the experiment using the random face generator plugin within MakeHuman. The example below would be useful if there are too many random faces to render (e.g., trial-unique stimuli with manipulation of other factors, such as expression).
+
+```python
+# the face_generator.py file is from the face generator plugin
+import face_generator as fg
+import numpy as np
+import os
+from glob import glob
+# the socket plugin comes with py_client.py
+from py_client import PythonMHC
+
+# first, setup your directories and load your pre-existing sample models:
+# the psychopy project directory
+path = "C:\\Users\\jason\\Documents\\_Research\\makehuman\\socket_tester"
+# where are you saving your mhm files?
+out_model_path = os.path.join(path,"generated_models")
+
+# where are the pre-established models (aside from the average identity)?
+model_samples = os.path.join(path,"sample_models")
+models_list = glob(os.path.join(model_samples, "*.mhm"))
+
+# where are you saving your images?
+img_path = os.path.join(path,"renders")
+
+# set the path/name to your average identity
+avg_path = os.path.join(path,"identity_average.mhm")
+# load the average identity's parameters
+avg = fg.read_params(avg_path)
+
+# load the other models' parameters
+full_params = [fg.read_params(f) for f in models_list]
+
+# load the keys, the average, and the rest of the models
+all_stuff = fg.get_ordered_values(avg, *full_params)
+# the keys for the features being changed
+keys = all_stuff[0]
+# the average face parameters (similar to avg, but it includes 0's for key values that exist in the other model files)
+avg_face = all_stuff[1]
+face_arr = np.array(all_stuff[2:])
+radius, face_arr = fg.set_faces_to_radius(avg_face, face_arr)
+
+
+# get ready to actually make models and render things.
+# what model_number are you on now?
+model_number = 0
+# these are the render settings
+# you may want a different image size
+size = (300,300)
+settings = dict(AA=True, dimensions=size, lightmapSSS=True)
+
+# start the socket client (do this after you already pressed the Socket Render button in MakeHuman)
+makehuman = PythonMHC()
+
+# make and render 1 face per trial or stimulus
+# (could use this "try-except" in a code component before a presentation trial routine 
+#  or you could put it into a loop to make stimulus models and images ahead of time)
+try:
+    # make a model (depending on your experiment, you could make a bunch ahead of time, 
+    #  but then you may as well use the Generate Faces plugin on the GUI instead)
+    faceX = fg.make_new_face(avg_face, face_arr)
+    
+    # save a model to model_path
+    model_path = os.path.join(out_model_path, "face{0:04d}.mhm".format(model_number))
+    fg.write_mimic_file(avg_path, model_path, keys, faceX)
+    
+    # load the model into makehuman
+    makehuman.load_model(model_path)
+    # render the model
+    # use the "image_path" variable in a PsychoPy ImageStim image instead of printing it
+    image_path = makehuman.get_render(img_path, settings, model_number)
+    #print(image_path)
+    
+    # get ready for the next model
+    model_number+=1
+    
+except Exception as e:
+    print(e)
+    makehuman.send("shutdown")
+#finally:
+# at the end of the experiment (or the end of your code), you can shutdown and close the socket so that makehuman will 
+#  function normally until you hit the Socket Render button again.
+makehuman.send("shutdown")
+```
 
 
 
