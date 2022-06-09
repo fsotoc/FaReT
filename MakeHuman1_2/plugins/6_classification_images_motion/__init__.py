@@ -158,7 +158,7 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         self.trialsBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("1"))
 
         classificationImagesSettingsBox.addWidget(gui.TextView("The number of frames per trial"))
-        self.framesBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("4"))
+        self.framesBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("30"))
 
         classificationImagesSettingsBox.addWidget(gui.TextView("Orbit Camera Y (left-right)"))
         self.camY = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.0"))
