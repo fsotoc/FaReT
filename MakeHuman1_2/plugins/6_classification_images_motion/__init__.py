@@ -200,7 +200,7 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         classificationImagesSettingsBox.addWidget(self.modelGroupBox)
         classificationImagesSettingsBox.addWidget(gui.TextView("Mode and SD"))
         self.modelAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
-        self.modelAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.2"))
+        self.modelAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
         classificationImagesSettingsBox.addWidget(gui.TextView("Concentration and SD"))
         self.modelBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("25.0"))
         self.modelBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("7.6667"))
@@ -226,7 +226,7 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
 
         # add the default CCNLab NSF groups
         alpha = 0.5
-        alpha_sd = .2
+        alpha_sd = .5/3
         beta = 25.0
         beta_sd = 7 + 1/3.
         
@@ -279,7 +279,7 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         
         classificationImagesSettingsBox.addWidget(gui.TextView("Mode and SD"))
         self.expressionAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
-        self.expressionAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.2"))
+        self.expressionAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
         classificationImagesSettingsBox.addWidget(gui.TextView("Concentration and SD"))
         self.expressionBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("25.0"))
         self.expressionBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("7.6667"))

@@ -209,8 +209,9 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
                         all_data[shape+"_C"] = concentration2
                         all_data[shape+"_A"] = alpha
                         all_data[shape+"_B"] = beta
-                        all_data[shape] = progress_bcdf
+                        all_data[shape+"_P"] = progress_bcdf
                         my_shapes[shape] = shapes[shape] + delta_shape[shape]*progress_bcdf
+                        all_data[shape] = my_shapes[shape]
 
                         amode = mode-(mode2-mode)
                         acon = concentration-(concentration2-concentration)
@@ -220,15 +221,18 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
                         anti_all_data[shape+"_C"] = acon
                         anti_all_data[shape+"_A"] = alpha
                         anti_all_data[shape+"_B"] = beta
-                        anti_all_data[shape] = progress_bcdf
+                        anti_all_data[shape+"_P"] = progress_bcdf
                         amy_shapes[shape] = shapes[shape] + delta_shape[shape]*progress_bcdf
+                        anti_all_data[shape] = amy_shapes[shape]
                         break
                 if not changed:
                     # linear operation based on frame progress
-                    all_data[shape] = progress
-                    anti_all_data[shape] = progress
+                    all_data[shape+"_P"] = progress
+                    anti_all_data[shape+"_P"] = progress
                     my_shapes[shape] = my_shapes[shape] + delta_shape[shape]*progress
                     amy_shapes[shape] = amy_shapes[shape] + delta_shape[shape]*progress
+                    all_data[shape] = my_shapes[shape]
+                    anti_all_data[shape] = amy_shapes[shape]
 
             for pose in my_poses:
                 changed = False
@@ -275,8 +279,9 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
                         all_data[pose+"_C"] = concentration2
                         all_data[pose+"_A"] = alpha
                         all_data[pose+"_B"] = beta
-                        all_data[pose] = progress_bcdf
+                        all_data[pose+"_P"] = progress_bcdf
                         my_poses[pose] = poses[pose] + delta_pose[pose]*progress_bcdf
+                        all_data[pose] = my_poses[pose]
 
                         amode = mode-(mode2-mode)
                         acon = concentration-(concentration2-concentration)
@@ -286,15 +291,18 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
                         anti_all_data[pose+"_C"] = acon
                         anti_all_data[pose+"_A"] = alpha
                         anti_all_data[pose+"_B"] = beta
-                        anti_all_data[pose] = progress_bcdf
+                        anti_all_data[pose+"_P"] = progress_bcdf
                         amy_poses[pose] = poses[pose] + delta_pose[pose]*progress_bcdf
+                        anti_all_data[pose] = amy_poses[pose]
                         break
                 if not changed:
                     # linear operation based on frame progress
-                    all_data[pose] = progress
-                    anti_all_data[pose] = progress
+                    all_data[pose+"_P"] = progress
+                    anti_all_data[pose+"_P"] = progress
                     my_poses[pose] = my_poses[pose] + delta_pose[pose]*progress
                     amy_poses[pose] = amy_poses[pose] + delta_pose[pose]*progress
+                    all_data[pose] = my_poses[pose]
+                    anti_all_data[pose] = amy_poses[pose]
 
             df.append(all_data)
             updateModelingParameters(my_shapes)
