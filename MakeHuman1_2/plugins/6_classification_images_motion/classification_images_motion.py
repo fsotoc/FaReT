@@ -201,7 +201,8 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
                         
 
 
-                        alpha,beta = convert_from_mode_concentration(mode2, concentration2)
+                        #alpha,beta = convert_from_mode_concentration(mode2, concentration2)
+                        alpha,beta = mode2, concentration2
                         # the nonlinear progress bar
                         progress_bcdf = beta_cdf(progress, alpha,beta)
                         # set the progress for this shape
@@ -215,7 +216,8 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
 
                         amode = mode-(mode2-mode)
                         acon = concentration-(concentration2-concentration)
-                        alpha,beta = convert_from_mode_concentration(amode, acon)
+                        #alpha,beta = convert_from_mode_concentration(amode, acon)
+                        alpha,beta = amode, acon
                         progress_bcdf = beta_cdf(progress, alpha,beta)
                         anti_all_data[shape+"_M"] = amode
                         anti_all_data[shape+"_C"] = acon
@@ -271,7 +273,8 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
                         
 
 
-                        alpha,beta = convert_from_mode_concentration(mode2, concentration2)
+                        #alpha,beta = convert_from_mode_concentration(mode2, concentration2)
+                        alpha,beta = mode2, concentration2
                         # the nonlinear progress bar
                         progress_bcdf = beta_cdf(progress, alpha,beta)
                         # set the progress for this pose
@@ -285,7 +288,8 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
 
                         amode = mode-(mode2-mode)
                         acon = concentration-(concentration2-concentration)
-                        alpha,beta = convert_from_mode_concentration(amode, acon)
+                        #alpha,beta = convert_from_mode_concentration(amode, acon)
+                        alpha,beta = amode, acon
                         progress_bcdf = beta_cdf(progress, alpha,beta)
                         anti_all_data[pose+"_M"] = amode
                         anti_all_data[pose+"_C"] = acon

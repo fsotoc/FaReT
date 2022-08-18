@@ -198,12 +198,12 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         self.modelGroups = ["all", "nose", "head", "forehead", "eyebrow", "eyes", "mouth", "ear", "chin", "cheek"]
         self.modelGroupBox = mhapi.ui.createComboBox(self.modelGroups, self._onModelGroupChange)
         classificationImagesSettingsBox.addWidget(self.modelGroupBox)
-        classificationImagesSettingsBox.addWidget(gui.TextView("Mode and SD"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("Alpha and SD"))
         self.modelAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
         self.modelAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
-        classificationImagesSettingsBox.addWidget(gui.TextView("Concentration and SD"))
-        self.modelBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("25.0"))
-        self.modelBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("7.6667"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("Beta and SD"))
+        self.modelBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
+        self.modelBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
         self.modelAddButton = classificationImagesSettingsBox.addWidget(gui.Button("Add"))
         self.modelRemoveButton = classificationImagesSettingsBox.addWidget(gui.Button("Remove"))
         
@@ -277,12 +277,12 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         self.expressionGroupBox = mhapi.ui.createComboBox(self.expressionGroups, self._onExpressionGroupChange)
         classificationImagesSettingsBox.addWidget(self.expressionGroupBox)
         
-        classificationImagesSettingsBox.addWidget(gui.TextView("Mode and SD"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("Alpha and SD"))
         self.expressionAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
         self.expressionAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
-        classificationImagesSettingsBox.addWidget(gui.TextView("Concentration and SD"))
-        self.expressionBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("25.0"))
-        self.expressionBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("7.6667"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("Beta and SD"))
+        self.expressionBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
+        self.expressionBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
 
         self.expressionAddButton = classificationImagesSettingsBox.addWidget(gui.Button("Add"))
         self.expressionRemoveButton = classificationImagesSettingsBox.addWidget(gui.Button("Remove"))
