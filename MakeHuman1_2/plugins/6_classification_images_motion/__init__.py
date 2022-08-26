@@ -198,12 +198,12 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         self.modelGroups = ["all", "nose", "head", "forehead", "eyebrow", "eyes", "mouth", "ear", "chin", "cheek"]
         self.modelGroupBox = mhapi.ui.createComboBox(self.modelGroups, self._onModelGroupChange)
         classificationImagesSettingsBox.addWidget(self.modelGroupBox)
-        classificationImagesSettingsBox.addWidget(gui.TextView("Alpha and SD"))
-        self.modelAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
-        self.modelAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
-        classificationImagesSettingsBox.addWidget(gui.TextView("Beta and SD"))
-        self.modelBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
-        self.modelBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("log2 Alpha and SD"))
+        self.modelAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.0"))
+        self.modelAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("1.0"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("log2 Beta and SD"))
+        self.modelBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.0"))
+        self.modelBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("1.0"))
         self.modelAddButton = classificationImagesSettingsBox.addWidget(gui.Button("Add"))
         self.modelRemoveButton = classificationImagesSettingsBox.addWidget(gui.Button("Remove"))
         
@@ -225,10 +225,10 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         self.expressionFeatureList = classificationImagesSettingsBox.addWidget(gui.ListView())
 
         # add the default CCNLab NSF groups
-        alpha = 0.5
-        alpha_sd = .5/3
-        beta = 25.0
-        beta_sd = 7 + 1/3.
+        alpha = 0.0
+        alpha_sd = 1.0
+        beta = 0.0
+        beta_sd = 1.0
         
         # between the brows
         features = "NoseWrinkler"
@@ -277,12 +277,12 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         self.expressionGroupBox = mhapi.ui.createComboBox(self.expressionGroups, self._onExpressionGroupChange)
         classificationImagesSettingsBox.addWidget(self.expressionGroupBox)
         
-        classificationImagesSettingsBox.addWidget(gui.TextView("Alpha and SD"))
-        self.expressionAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
-        self.expressionAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
-        classificationImagesSettingsBox.addWidget(gui.TextView("Beta and SD"))
-        self.expressionBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.5"))
-        self.expressionBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.1667"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("log2 Alpha and SD"))
+        self.expressionAlphaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.0"))
+        self.expressionAlphaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("1.0"))
+        classificationImagesSettingsBox.addWidget(gui.TextView("log2 Beta and SD"))
+        self.expressionBetaBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("0.0"))
+        self.expressionBetaSDBox = classificationImagesSettingsBox.addWidget(gui.TextEdit("1.0"))
 
         self.expressionAddButton = classificationImagesSettingsBox.addWidget(gui.Button("Add"))
         self.expressionRemoveButton = classificationImagesSettingsBox.addWidget(gui.Button("Remove"))
