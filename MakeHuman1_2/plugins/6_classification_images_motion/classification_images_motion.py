@@ -102,7 +102,8 @@ def get_range(shape_parameter):
         return -1.0, 1.0
     return 0.0, 1.0
 
-def generate_CI_info(base_model, end_model, base_expression, end_expression, trials, frames, shape_parameters, shape_data, pose_parameters, pose_data, save_path, SD=.3, rot_X=0, rot_Y=0, cam_Z=8.7, material_file="young_caucasian_avg", frame_rate=30, render_function=None):
+def generate_CI_info(base_model, end_model, base_expression, end_expression, trials, frames, shape_parameters, shape_data, pose_parameters, pose_data, save_path, SD=.3, rot_X=0, rot_Y=0, cam_Z=8.7, material_file="young_caucasian_avg", frame_rate=30, dimensions=(200,200), render_function=None):
+    resolution = dimensions#(200, 200)
     # the base_model is a path to the model
     # the shape parameters and pose_parameters are lists of parameters to use (convert to regex)
     gui3d.app.loadHumanMHM(base_model)
@@ -331,7 +332,7 @@ def generate_CI_info(base_model, end_model, base_expression, end_expression, tri
         for trial in range(trials):
             filename = os.path.join(save_path, "trial_anti_sample_{0:04d}.mp4".format(trial))
             codec = cv2.VideoWriter_fourcc(*"mp4v")
-            resolution = (200, 200)
+            
             Output = cv2.VideoWriter(filename, codec, frame_rate, resolution)
 
             for frame in range(frames):

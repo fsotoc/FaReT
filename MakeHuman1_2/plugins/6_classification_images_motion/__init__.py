@@ -375,8 +375,9 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
                                 material_file = self.materialBox.getText(),
                                 rot_X = float(self.camX.getText()),
                                 rot_Y = float(self.camY.getText()),
-                                cam_Z = float(self.camZ.getText()))
-            classification_images_motion.do_op(classification_image_settings=CI_settings, 
+                                cam_Z = float(self.camZ.getText()),
+                                dimensions = settings['dimensions'])
+            classification_images_motion.do_op(classification_image_settings=CI_settings,
             save_path = self.pathBox.getText(), 
             frame_rate = frame_rate, render_function = (mh2opengl.Render, settings))
             #img = mh2opengl.Render(settings)
