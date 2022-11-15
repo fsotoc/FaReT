@@ -259,11 +259,14 @@ class ClassificationImagesMotionOpenGLTaskView(RenderTaskView):
         self.expressionFeatureList.addItem('{0}: ({1:0.2f}, {2:0.2f})'.format(features, alpha, beta), data=dict(features=features, alpha=alpha, alpha_sd=alpha_sd, beta=beta, beta_sd=beta_sd))
 
         # left mouth and cheek
-        features = "Mouth.*Left,TongueLeft,Left.*Cheek"
+        features = "Mouth.*Left,TongueLeft"
         self.expressionFeatureList.addItem('{0}: ({1:0.2f}, {2:0.2f})'.format(features, alpha, beta), data=dict(features=features, alpha=alpha, alpha_sd=alpha_sd, beta=beta, beta_sd=beta_sd))
 
-        # right mouth and cheek
-        features = "Mouth.*Right,TongueRight,Right.*Cheek"
+        # right mouth
+        features = "Mouth.*Right,TongueRight"
+        self.expressionFeatureList.addItem('{0}: ({1:0.2f}, {2:0.2f})'.format(features, alpha, beta), data=dict(features=features, alpha=alpha, alpha_sd=alpha_sd, beta=beta, beta_sd=beta_sd))
+
+        features = "Cheek"
         self.expressionFeatureList.addItem('{0}: ({1:0.2f}, {2:0.2f})'.format(features, alpha, beta), data=dict(features=features, alpha=alpha, alpha_sd=alpha_sd, beta=beta, beta_sd=beta_sd))
 
         # center mouth
