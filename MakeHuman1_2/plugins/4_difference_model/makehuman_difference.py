@@ -116,8 +116,8 @@ def difference_models(model1, expression1, model2, expression2):
     mx = np.max(vf[:,channel])
     if mx != 0:
         vf/=mx
-    vf *= 191
-    vf += 64
+    vf *= 135
+    vf += 120
     # no floats allowed on the colors.
     human.mesh.r_color = np.array(np.round(vf,0), dtype=np.uint8)
     
@@ -164,14 +164,81 @@ def RGB_difference_models(model1, expression1, model2, expression2):
     if mx != 0:
         vf/=mx
     # range of colors
-    vf *= 191
+    vf *= 135
     # dark grey
-    vf += 64
+    vf += 120
     # no floats allowed on the colors.
     human.mesh.r_color = np.array(np.round(vf,0), dtype=np.uint8)
     # set the alpha
     human.mesh.r_color[:,3] = 255
 
+    # update the color
+    human.mesh.sync_color()
+    return human.mesh.r_color
+    
+def closeness_to_target(model1, expression1, model2, expression2, model_target, expression_target, mx=.00001):
+    
+    # load the target
+    gui3d.app.loadHumanMHM(model_target)
+    human = G.app.objects[0]
+    setExpression(expression_target)
+    c_target = human.mesh.r_coord*1
+    
+    # load model1 (reference)
+    gui3d.app.loadHumanMHM(model1)
+    human = G.app.objects[0]
+    setExpression(expression1)
+    c1 = human.mesh.r_coord*1
+    
+    # load model2
+    gui3d.app.loadHumanMHM(model2)
+    human = G.app.objects[0]
+    setExpression(expression2)
+    c2 = human.mesh.r_coord*1
+    
+    # load a built-in skin that supports changing the colors (default does not!)
+    human.mesh.material.fromFile(os.path.join(getpath.getSysDataPath(), "skins/young_caucasian_male/young_caucasian_male2.mhmat"))
+    # get rid of the skin properties
+    human.material.diffuseTexture=None
+    
+    # first we get a vector with values and standardize them to go from 0 to 255
+    vals = np.zeros(human.mesh.r_color.shape[0])
+    for k in np.arange(human.mesh.r_color.shape[0]):
+        # distance to target
+        # model1 is taken as a reference, so positive values means model2 is closer to target than reference,
+        # negative values means model 2 is farther to target than reference
+        d_1 = np.sum((c1[k]-c_target[k])**2)
+        d_2 = np.sum((c2[k]-c_target[k])**2)
+        vals[k] = d_1-d_2
+    
+    
+    # we get sign of values
+    vsign = np.sign(vals)
+    
+    if mx != 0:
+        vals = vals/mx
+    
+    
+    # now we transform the values to rgb according to our colormap
+    vf = np.zeros(human.mesh.r_color.shape)
+    # set the rgb of the skin to the difference
+    for k,v in enumerate(human.mesh.r_color):
+
+        # we paint red if positive, blue if negative
+        if vsign[k]>0:
+            vf[k,0] = np.abs(vals[k])
+        elif vsign[k]<0:
+            vf[k,2] = np.abs(vals[k])
+    # the difference spans from 0 to 255, with 128 being the middle
+    # range of colors
+    vf *= 135
+    # dark grey
+    vf += 120
+    # no floats allowed on the colors.
+    human.mesh.r_color = np.array(np.round(vf,0), dtype=np.uint8)
+    # set the alpha
+    human.mesh.r_color[:,3] = 255
+        
     # update the color
     human.mesh.sync_color()
     return human.mesh.r_color
