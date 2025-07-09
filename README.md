@@ -36,6 +36,7 @@ If you find FaReT useful for your research, please consider supporting the devel
 * Inside the MakeHuman directory, go to the sub-folder `Resources/plugins` (MacOS X; **not** the `PlugIns` folder inside `Contents`, but a subfolder inside the `Resources` folder) or `plugins` (others).
 * From the downloaded FaReT folder, copy the entire sub-folders `4_average_model`, `4_interpolate_render`, `4_socket_psychopy`, and `4_standardizer`.
 * Paste the subfolders and their contents into MakeHuman's plugins folder.
+* Inside the MakeHuman directory, go to the sub-folder `shared` and copy the files from the `shared` subfolder within the FaReT download.
 * If you already had MakeHuman open ***before*** you installed the plugin, close it and ***re-open*** it so that the plugin will load.
 * When loaded correctly, each plugin will produce a new menu as described below.
 
