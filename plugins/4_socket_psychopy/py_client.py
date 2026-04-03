@@ -145,6 +145,22 @@ class PythonMHC(communicator.Communicator):
     def get_model_params(self):
         return self.execute_MH("commons.get_shape_params", True, True)
 
+    def export_obj(self, filepath, scale_unit="decimeter", use_normals=False, hidden_geom=False, feet_on_ground=True):
+        """
+        Export the current model to OBJ using the same scale-unit choices as
+        MakeHuman's GUI exporter: decimeter, meter, inch, or centimeter.
+        """
+        return self.execute_MH(
+            "commons.export_obj",
+            True,
+            True,
+            filepath,
+            scale_unit,
+            use_normals,
+            hidden_geom,
+            feet_on_ground,
+        )
+
     def set_model_params_beta_cdf(self, paramsA, paramsB, bPercent, alpha_beta=None, bMaxPercent=100.0):
         # example alpha_beta = {"^head":(0.5,1.0)}
         # compute the appropriate linear contrast by percentage.
