@@ -32,7 +32,7 @@ def r8_beta ( a, b ):
 #    Output, real R8_BETA, the value of the function.
 #
   import numpy as np
-  from r8_gamma import r8_gamma
+  from .r8_gamma import r8_gamma
   from sys import exit
 
   if ( a <= 0.0 or b <= 0.0 ):
@@ -64,7 +64,7 @@ def r8_beta_test ( ):
 #    John Burkardt
 #
   import platform
-  from beta_values import beta_values
+  from .beta_values import beta_values
 
   print ( '' )
   print ( 'R8_BETA_TEST:' )

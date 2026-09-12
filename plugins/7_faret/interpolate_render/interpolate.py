@@ -33,7 +33,7 @@ import json
 
 #from scipy.stats import beta
 # https://people.sc.fsu.edu/~jburkardt/py_src/prob/prob.html
-import beta
+from ..shared import beta
 beta_cdf = beta.beta_cdf
 
 
