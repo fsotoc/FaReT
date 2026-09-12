@@ -51,7 +51,7 @@ def beta_inc ( a, b, x ):
 #    Output, BETA_INC, the value of the function.
 #
   import numpy as np
-  from r8_beta import r8_beta
+  from .r8_beta import r8_beta
   from sys import exit
 
   it_max = 1000
@@ -168,7 +168,7 @@ def beta_inc_test ( ):
 #    John Burkardt
 #
   import platform
-  from beta_inc_values import beta_inc_values
+  from .beta_inc_values import beta_inc_values
 
   print ( '' )
   print ( 'BETA_INC_TEST:' )

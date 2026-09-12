@@ -28,7 +28,7 @@ def beta_cdf ( x, a, b ):
 #
 #    Output, real CDF, the value of the CDF.
 #
-  from beta_inc import beta_inc
+  from .beta_inc import beta_inc
 
   if ( x <= 0.0 ):
     cdf = 0.0
@@ -84,8 +84,8 @@ def beta_cdf_inv ( cdf, p, q ):
 #    which does not cause an underflow.
 #
   import numpy as np
-  from beta_inc import beta_inc
-  from r8_gamma import r8_gamma
+  from .beta_inc import beta_inc
+  from .r8_gamma import r8_gamma
   from sys import exit
 
   sae = -37.0
@@ -424,7 +424,7 @@ def beta_pdf ( x, a, b ):
 #
 #    Output, real PDF, the value of the PDF.
 #
-  from r8_beta import r8_beta
+  from .r8_beta import r8_beta
 
   if ( x < 0.0 or 1.0 < x ):
     pdf = 0.0

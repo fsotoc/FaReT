@@ -36,7 +36,7 @@ from numpy.core.fromnumeric import shape
 
 #from scipy.stats import beta
 # https://people.sc.fsu.edu/~jburkardt/py_src/prob/prob.html
-import beta
+from ..shared import beta
 beta_cdf = beta.beta_cdf
 
 # make human doesn't have pandas by default, so
