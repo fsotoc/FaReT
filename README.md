@@ -11,6 +11,10 @@ If you find FaReT useful for your research, please consider supporting the devel
 
 ## Table of contents
 * [Installation](#installation)
+   * [Install MakeHuman and GIMP](#install-makehuman-and-gimp)
+   * [Download FaReT](#download-faret)
+   * [Install the MakeHuman plugin](#install-the-makehuman-plugin)
+   * [Install the GIMP plugin](#install-the-gimp-plugin)
 * ["Morphing" in 3d shape space](#morphing-in-3d-shape-space)
    * [Interpolation (i.e., morphing)](#interpolation-ie-morphing) 
    * [Extrapolation (i.e., caricaturing)](#extrapolation-ie-caricaturing)
@@ -20,31 +24,119 @@ If you find FaReT useful for your research, please consider supporting the devel
 * [Communicating with Psychopy to render faces online](#communicating-with-psychopy-to-render-faces-online)
 
 # Installation
-## Install pre-requisites
-* You can download and install MakeHuman (stable version) from the following website: <http://www.makehumancommunity.org/content/downloads.html>. This is all you need to use FaReT and generate single face images.
-* We have also developed a GIMP plugin that generates dynamic GIF files from a sequence of images rendered from MakeHuman. To use this plugin, download and install GIMP from the following website: <https://www.gimp.org/>
+
+FaReT adds tools to **MakeHuman** (face modeling and rendering) and **GIMP** (animated GIFs from render sequences). Install both host apps, then add the FaReT plugins below.
+
+For MakeHuman: you do **not** need to edit MakeHuman’s built-in `shared` folder. Everything that plugin needs ships inside `7_faret`.
+
+## Install MakeHuman and GIMP
+FaReT uses two host applications:
+
+1. **MakeHuman** — create and render face models. Download the stable build from <http://www.makehumancommunity.org/content/downloads.html>.
+2. **GIMP** — build animated GIFs from FaReT render sequences. Download from <https://www.gimp.org/>.
+
+Install both before you add the FaReT plugins below.
 
 ## Download FaReT
-* Click on the green button labeled `Clone or Download` above, and then choose `Download ZIP`
-* Once the ZIP file is downloaded, open it with your unzipping software.
+1. On this GitHub page, click the green **Code** button, then **Download ZIP** (older GitHub layouts may say **Clone or download**).
+2. Unzip the file somewhere easy to find (for example your Desktop or Documents folder).
+3. Inside the unzipped folder you should see a `plugins` folder. Open it: there is a single plugin directory named `7_faret`.
 
-## MakeHuman plugins
-* Locate your makehuman installation directory.
-    * **On Windows**, find the MakeHuman shortcut located where you unzipped MakeHuman. Right-click on the shortcut and choose `Open File Location`. This will open the installation folder.
-    * **On MacOS X**, open Finder and go to the folder where MakeHuman has been installed. This is usually the `Applications` folder. Right-click (or control+click) the MakeHuman shortcut and choose `Show Package Contents`.
-    * **On Debian-like** systems, when using a package management, the folder is found at `/usr/share/makehuman`. 
-* Inside the MakeHuman directory, go to the sub-folder `Resources/plugins` (MacOS X; **not** the `PlugIns` folder inside `Contents`, but a subfolder inside the `Resources` folder) or `plugins` (others).
-* From the downloaded FaReT folder, copy the entire sub-folders inside the `plugins` folder.
-* Paste the subfolders and their contents into MakeHuman's `plugins` folder.
-* From the downloaded FaReT folder, copy the files inside the `shared` folder.
-* Paste the files into MakeHuman's `shared` folder.
-* If you already had MakeHuman open ***before*** you installed the plugin, close it and ***re-open*** it so that the plugin will load.
-* When loaded correctly, each plugin will produce a new menu as described below.
+That `7_faret` folder is the only thing you need to install into MakeHuman.
 
-## GIMP Plugin
-* If GIMP is already opened, close it.
-* From the downloaded FaReT folder, copy the `make_gif_plugin.py` file and paste it into the **.gimp-2.8/plug-ins** folder.
-    * Refer to this page <https://en.wikibooks.org/wiki/GIMP/Installing_Plugins> for specific plugin installation instructions depending on your operating system. 
+## Install the MakeHuman plugin
+
+### Recommended: install as a user plugin (no admin rights)
+
+This is usually the easiest option on Windows, macOS, and Linux.
+
+1. Fully **quit MakeHuman** if it is running.
+2. Create MakeHuman’s user plugins folder if it does not exist yet (MakeHuman often creates it after the first launch). Typical locations:
+
+   | System | User plugins folder |
+   |--------|---------------------|
+   | **Windows** | `Documents\makehuman\v1py3\plugins\` |
+   | **macOS** | `Documents/makehuman/v1py3/plugins/` |
+   | **Linux** | `~/Documents/makehuman/v1py3/plugins/` |
+
+   If your MakeHuman version uses a slightly different path under `Documents/makehuman/`, use that `plugins` folder instead.
+
+3. **Copy the entire `7_faret` folder** (not just its contents) into that `plugins` folder.
+   * After copying, you want something like:  
+     `...\makehuman\v1py3\plugins\7_faret\`  
+     with files such as `__init__.py` directly inside `7_faret`.
+4. Start MakeHuman.
+5. Open **Settings → User Plugins**, enable **`7_faret`**, then activate/restart if MakeHuman asks you to.
+6. Confirm the FaReT menus listed above are present.
+
+### Alternative: install into MakeHuman’s program `plugins` folder
+
+Use this if you prefer a system-wide install, or if user plugins are not available in your MakeHuman build.
+
+1. Fully **quit MakeHuman**.
+2. Find MakeHuman’s installation / application folder:
+
+   * **Windows:** Right-click the MakeHuman shortcut → **Open file location**. Open the MakeHuman folder that contains a `plugins` directory (often next to the MakeHuman executable).
+   * **macOS:** In Finder, go to **Applications**. Right-click (or Control-click) **MakeHuman** → **Show Package Contents**. Then open **Contents → Resources → plugins**.  
+     Important: use the `Resources/plugins` folder, **not** `Contents/PlugIns`.
+   * **Linux:** Common locations include `/usr/share/makehuman/plugins` (distro packages) or the `plugins` folder inside the directory where you extracted an official MakeHuman build.
+3. **Copy the entire `7_faret` folder** into that MakeHuman `plugins` folder.
+4. Start MakeHuman and confirm the FaReT menus appear.
+
+### Important do’s and don’ts
+* **Do** copy the whole folder named `7_faret`.
+* **Do** keep the folder name as `7_faret` (MakeHuman uses the name for loading/order).
+* **Don’t** copy only the *inside* of `7_faret` so that `__init__.py` lands directly in `plugins/`. The plugin must remain a folder: `plugins/7_faret/__init__.py`.
+
+### What success looks like
+After a correct install and a MakeHuman restart, you should see new FaReT tools in MakeHuman, including:
+
+* **Rendering** → *Interpolation Render*, *Classification Images*, *Socket Render*, and related tabs
+* **Utilities** → *Average Model*, *Standardize*, *Face Generator*, *Difference Model*, and related tabs
+
+If those menus are missing, jump to [Troubleshooting](#troubleshooting-plugin-install) below.
+
+### Troubleshooting plugin install
+* **No new menus:** Confirm the path is `...\plugins\7_faret\__init__.py`, then restart MakeHuman. For user plugins, make sure `7_faret` is enabled under **Settings → User Plugins**.
+* **`ModuleNotFoundError: beta` or missing math helpers:** You are likely on an old install layout. Remove leftover FaReT files from MakeHuman’s `shared` folder if you added them before, and install only `7_faret` as described above.
+* **Permission errors when copying into the program folder:** Use the [user plugin](#recommended-install-as-a-user-plugin-no-admin-rights) method instead.
+
+### Advanced: developers (symlink instead of copy)
+
+If you are editing FaReT source code and want MakeHuman to pick up changes without recopying, create a link named `7_faret` that points at your repo’s `plugins/7_faret` folder.
+
+**macOS / Linux (Terminal):**
+
+```bash
+ln -sfn /FULL/PATH/TO/FaReT/plugins/7_faret \
+  /FULL/PATH/TO/makehuman/plugins/7_faret
+```
+
+**Windows (Command Prompt as Administrator, or Developer Mode):**
+
+```bat
+mklink /D "C:\Path\To\makehuman\plugins\7_faret" "C:\Path\To\FaReT\plugins\7_faret"
+```
+
+You can also link into your user plugins folder instead of the program `plugins` folder.
+
+## Install the GIMP plugin
+FaReT’s GIMP plugin turns a folder of rendered PNG frames into an animated GIF.
+
+1. Quit GIMP if it is open.
+2. From the FaReT download, copy `make_gif_plugin.py` into GIMP’s plug-ins folder.
+3. Typical plug-ins locations:
+
+   | System | GIMP plug-ins folder (version numbers may differ) |
+   |--------|---------------------------------------------------|
+   | **Windows** | `C:\Users\<You>\AppData\Roaming\GIMP\2.10\plug-ins\` |
+   | **macOS** | `~/Library/Application Support/GIMP/2.10/plug-ins/` |
+   | **Linux** | `~/.config/GIMP/2.10/plug-ins/` |
+
+4. On some systems the `.py` file must be marked executable (Linux/macOS), and GIMP may require the script to live in its own subfolder, depending on GIMP version.
+5. Restart GIMP. For OS-specific details, see <https://en.wikibooks.org/wiki/GIMP/Installing_Plugins>.
+
+How to use it is covered under [Using GIMP plugin to create GIF files](#using-gimp-plugin-to-create-gif-files).
 
 # "Morphing" in 3d shape space
 ## Interpolation (i.e., "morphing")
@@ -164,10 +256,12 @@ mass_make_gifs("C:/path-to-png-folders/", "C:/path-to-png-folders/MH_{0:04d}.gif
 The Socket Render plugin is made for telling MakeHuman what to do from PsychoPy or any Python project.
 
 ## PsychoPy Installation
-Copy these files next to your PsychoPy experiment file (or into the site-packages library that PsychoPy uses):
-* communicator.py
-  * MakeHuman also needs communicator.py, so do not use Cut to move it out of 4_socket_render: Copy it.
-* py_client.py
+Copy these files from FaReT’s `plugins/7_faret/socket_psychopy/` folder next to your PsychoPy experiment file (or into the Python environment PsychoPy uses):
+
+* `communicator.py`
+* `py_client.py`
+
+**Important:** MakeHuman still needs its own copy of `communicator.py` inside the installed `7_faret` plugin. **Copy** these files into your PsychoPy project — do not cut/move them out of `7_faret`.
 
 ## Setting up MakeHuman
 * In MakeHuman, navigate to the Rendering tab at the top of the window.
